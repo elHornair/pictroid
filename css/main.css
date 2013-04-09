@@ -1,0 +1,43 @@
+.item {
+    width: 100px;
+    height: 100px;
+    border: 1px solid black;
+    cursor: move;
+    list-style-type: none;
+    margin: 3px;
+    z-index: 2;
+}
+
+.item.yui3-dd-dragging {
+    z-index: 99;
+}
+
+.item.left {
+    background-color: red;
+}
+.item.right {
+    background-color: green;
+}
+.item.up {
+    background-color: blue;
+}
+.item.down {
+    background-color: #ffff00;
+}
+
+#items .item {
+    float: left;
+}
+
+#drop {
+    clear: both;
+    border: 1px solid black;
+    background-color: #eee;
+    min-height: 200px;
+    width: 300px;
+    z-index: 1;
+}
+
+#drop.yui3-dd-drop-over {
+    background-color: #ccc;
+}

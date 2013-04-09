@@ -48,7 +48,20 @@ YUI.add('pictroid-main', function (Y) {
         /****************************************************************************************/
 
         initializer: function (cfg) {
-            Y.log('hello from pictroid');
+            var del = new Y.DD.Delegate({
+                    container: '#items',
+                    nodes: 'li'
+                }),
+                drop = Y.one('#drop').plug(Y.Plugin.Drop);
+
+            del.on('drag:end', function (e) {
+                e.preventDefault();
+            });
+
+            drop.drop.on('drop:hit', function (e) {
+                var droppedItem = e.drag.get('node');
+                drop.append('<li class="item ' + droppedItem.getData().type + '"></li>');
+            });
         },
 
         destructor: function () {
@@ -58,5 +71,5 @@ YUI.add('pictroid-main', function (Y) {
 
     Y.namespace('Pictroid').Main = Main;
 
-}, '0.1', { requires: ['base']});
+}, '0.1', { requires: ['base', 'dd', 'dd-drop', 'dd-constrain']});
 

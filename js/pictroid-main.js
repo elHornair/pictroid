@@ -19,6 +19,9 @@ YUI.add('pictroid-main', function (Y) {
     /****************************************************************************************/
 
     Main.ATTRS = {
+        tileSize: {
+            value: 106// size in pixels, including margins
+        }
     };
 
     Y.extend(Main, Y.Base, {
@@ -27,11 +30,17 @@ YUI.add('pictroid-main', function (Y) {
         /*********************************** private members ************************************/
         /****************************************************************************************/
 
+        _currentlyDriftedChildIndex: null,
 
         /****************************************************************************************/
         /*********************************** private methods ************************************/
         /****************************************************************************************/
 
+        _cleanupDrifts: function (dropContainer) {
+            var currentChildren = dropContainer.get('node').get('children');
+            currentChildren.removeClass('drift');
+            this._currentlyDriftedChildIndex = null;
+        },
 
         /****************************************************************************************/
         /************************************ event handlers ************************************/
@@ -48,7 +57,8 @@ YUI.add('pictroid-main', function (Y) {
         /****************************************************************************************/
 
         initializer: function (cfg) {
-            var del = new Y.DD.Delegate({
+            var inst = this,
+                del = new Y.DD.Delegate({
                     container: '#items',
                     nodes: 'li'
                 }),
@@ -60,7 +70,43 @@ YUI.add('pictroid-main', function (Y) {
 
             drop.drop.on('drop:hit', function (e) {
                 var droppedItem = e.drag.get('node');
+
+                inst._cleanupDrifts(e.target);
+                // TODO: append child at correct position
                 drop.append('<li class="item ' + droppedItem.getData().type + '"></li>');
+            });
+
+            drop.drop.on('drop:exit', function (e) {
+                inst._cleanupDrifts(e.target);
+            });
+
+            drop.drop.on('drop:over', function (e) {
+                var tileSize = inst.get('tileSize'),
+                    dropTarget = e.target,
+                    currentChildren = dropTarget.get('node').get('children'),
+                    currentDragCenterY = e.drag.realXY[1] - dropTarget.region.top + (tileSize / 2),
+                    childToDriftIndex,
+                    childToDrift;
+
+                // only drift if there are actual children
+                if (currentChildren.size() > 0) {
+                    childToDriftIndex = Math.floor((currentDragCenterY - tileSize / 2) / tileSize) + 1;
+
+                    if (inst._currentlyDriftedChildIndex !== childToDriftIndex) {
+                        inst._currentlyDriftedChildIndex = childToDriftIndex;
+                        currentChildren.removeClass('drift');
+
+                        if (childToDriftIndex < currentChildren.size()) {
+                            // move
+                            childToDrift = currentChildren.item(childToDriftIndex);
+                            childToDrift.addClass('drift');
+                        }
+                    }
+
+                }
+
+                // TODO: add possibility to remove/reorder item
+
             });
         },
 

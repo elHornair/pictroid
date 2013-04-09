@@ -6,6 +6,11 @@
     list-style-type: none;
     margin: 3px;
     z-index: 2;
+
+    -webkit-transition: margin 0.3s ease-in-out;
+    -moz-transition: margin 0.3s ease-in-out;
+    -o-transition: margin 0.3s ease-in-out;
+    transition: margin 0.3s ease-in-out;
 }
 
 .item.yui3-dd-dragging {
@@ -25,6 +30,10 @@
     background-color: #ffff00;
 }
 
+.item.drift {
+    margin-top: 50px;
+}
+
 #items .item {
     float: left;
 }
@@ -34,7 +43,8 @@
     border: 1px solid black;
     background-color: #eee;
     min-height: 200px;
-    width: 300px;
+    width: 200px;
+    padding-bottom: 50px;
     z-index: 1;
 }
 

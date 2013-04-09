@@ -42,6 +42,15 @@ YUI.add('pictroid-main', function (Y) {
             this._currentlyDriftedChildIndex = null;
         },
 
+        _calcRelativeDragCenterY: function (dropTarget, dragItem) {
+            return dragItem.realXY[1] - dropTarget.region.top + (this.get('tileSize') / 2);
+        },
+
+        _calcChildToDriftIndex: function (measurePointY) {
+            var tileSize = this.get('tileSize');
+            return Math.floor((measurePointY - tileSize / 2) / tileSize) + 1;
+        },
+
         /****************************************************************************************/
         /************************************ event handlers ************************************/
         /****************************************************************************************/
@@ -69,10 +78,13 @@ YUI.add('pictroid-main', function (Y) {
             });
 
             drop.drop.on('drop:hit', function (e) {
-                var droppedItem = e.drag.get('node');
+                var droppedItem = e.drag.get('node'),
+                    insertionIndex = inst._calcChildToDriftIndex(inst._calcRelativeDragCenterY(e.target, e.drag));
 
                 inst._cleanupDrifts(e.target);
+
                 // TODO: append child at correct position
+                console.log(insertionIndex);
                 drop.append('<li class="item ' + droppedItem.getData().type + '"></li>');
             });
 
@@ -81,16 +93,14 @@ YUI.add('pictroid-main', function (Y) {
             });
 
             drop.drop.on('drop:over', function (e) {
-                var tileSize = inst.get('tileSize'),
-                    dropTarget = e.target,
+                var dropTarget = e.target,
                     currentChildren = dropTarget.get('node').get('children'),
-                    currentDragCenterY = e.drag.realXY[1] - dropTarget.region.top + (tileSize / 2),
                     childToDriftIndex,
                     childToDrift;
 
                 // only drift if there are actual children
                 if (currentChildren.size() > 0) {
-                    childToDriftIndex = Math.floor((currentDragCenterY - tileSize / 2) / tileSize) + 1;
+                    childToDriftIndex = inst._calcChildToDriftIndex(inst._calcRelativeDragCenterY(dropTarget, e.drag));
 
                     if (inst._currentlyDriftedChildIndex !== childToDriftIndex) {
                         inst._currentlyDriftedChildIndex = childToDriftIndex;
@@ -106,6 +116,7 @@ YUI.add('pictroid-main', function (Y) {
                 }
 
                 // TODO: add possibility to remove/reorder item
+                // TODO: if the new item will be inserted as the last one, just make the container bigger instead of drifting an item
 
             });
         },

@@ -31,6 +31,7 @@ YUI.add('pictroid-main', function (Y) {
         /****************************************************************************************/
 
         _currentlyDriftedChildIndex: null,
+        _dropContainer: null,
 
         /****************************************************************************************/
         /*********************************** private methods ************************************/
@@ -63,14 +64,15 @@ YUI.add('pictroid-main', function (Y) {
             var dropContainer = e.target,
                 droppedItem = e.drag.get('node'),
                 currentChildren = dropContainer.get('node').get('children'),
-                insertionIndex = this._calcChildToDriftIndex(this._calcRelativeDragCenterY(e.target, e.drag));
+                insertionIndex = this._calcChildToDriftIndex(this._calcRelativeDragCenterY(e.target, e.drag)),
+                nodeToInsert = '<li class="item ' + droppedItem.getData().type + ' " data-type="' + droppedItem.getData().type + '"></li>';// TODO: use template
 
             this._cleanupDrifts(dropContainer);
 
             if (currentChildren.size() === 0 || insertionIndex >= currentChildren.size()) {
-                dropContainer.get('node').append('<li class="item ' + droppedItem.getData().type + '"></li>');
+                dropContainer.get('node').append(nodeToInsert);
             } else {
-                currentChildren.item(insertionIndex).insert('<li class="item ' + droppedItem.getData().type + '"></li>', 'before');
+                currentChildren.item(insertionIndex).insert(nodeToInsert, 'before');
             }
         },
 
@@ -102,6 +104,18 @@ YUI.add('pictroid-main', function (Y) {
             }
         },
 
+        _handleRunCodeClick: function () {
+            var parser = new Y.Pictroid.Parser(),
+                commands = [];
+
+            this._dropContainer.get('children').each(function (item) {
+                commands.push(item.getData().type);
+            });
+
+            parser.isValid(commands);
+
+        },
+
         /****************************************************************************************/
         /************************************ public methods ************************************/
         /****************************************************************************************/
@@ -115,14 +129,17 @@ YUI.add('pictroid-main', function (Y) {
             var dragItems = new Y.DD.Delegate({
                     container: '#items',
                     nodes: 'li'
-                }),
-                dropContainer = Y.one('#drop').plug(Y.Plugin.Drop);
+                });
+
+            this._dropContainer = Y.one('#drop').plug(Y.Plugin.Drop);
 
             // event listeners
             dragItems.on('drag:end', this._handleDragEnd);
-            dropContainer.drop.on('drop:hit', this._handleDropHit, this);
-            dropContainer.drop.on('drop:exit', this._handleDropExit, this);
-            dropContainer.drop.on('drop:over', this._handleDropOver, this);
+            this._dropContainer .drop.on('drop:hit', this._handleDropHit, this);
+            this._dropContainer .drop.on('drop:exit', this._handleDropExit, this);
+            this._dropContainer .drop.on('drop:over', this._handleDropOver, this);
+
+            Y.one('#btn_run_code').on('click', this._handleRunCodeClick, this);
 
             // TODO: add possibility to remove/reorder item
             // TODO: if the new item will be inserted as the last one, just make the container bigger instead of drifting an item
@@ -136,5 +153,5 @@ YUI.add('pictroid-main', function (Y) {
 
     Y.namespace('Pictroid').Main = Main;
 
-}, '0.1', { requires: ['base', 'dd', 'dd-drop', 'dd-constrain']});
+}, '0.1', { requires: ['base', 'dd', 'dd-drop', 'dd-constrain', 'pictroid-parser']});
 

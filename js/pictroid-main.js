@@ -55,6 +55,52 @@ YUI.add('pictroid-main', function (Y) {
         /************************************ event handlers ************************************/
         /****************************************************************************************/
 
+        _handleDragEnd: function (e) {
+            e.preventDefault();
+        },
+
+        _handleDropHit: function (e) {
+            var dropContainer = e.target,
+                droppedItem = e.drag.get('node'),
+                currentChildren = dropContainer.get('node').get('children'),
+                insertionIndex = this._calcChildToDriftIndex(this._calcRelativeDragCenterY(e.target, e.drag));
+
+            this._cleanupDrifts(dropContainer);
+
+            if (currentChildren.size() === 0 || insertionIndex >= currentChildren.size()) {
+                dropContainer.get('node').append('<li class="item ' + droppedItem.getData().type + '"></li>');
+            } else {
+                currentChildren.item(insertionIndex).insert('<li class="item ' + droppedItem.getData().type + '"></li>', 'before');
+            }
+        },
+
+        _handleDropExit: function (e) {
+            this._cleanupDrifts(e.target);
+        },
+
+        _handleDropOver: function (e) {
+            var dropTarget = e.target,
+                currentChildren = dropTarget.get('node').get('children'),
+                childToDriftIndex,
+                childToDrift;
+
+            // only drift if there are actual children
+            if (currentChildren.size() > 0) {
+                childToDriftIndex = this._calcChildToDriftIndex(this._calcRelativeDragCenterY(dropTarget, e.drag));
+
+                if (this._currentlyDriftedChildIndex !== childToDriftIndex) {
+                    this._currentlyDriftedChildIndex = childToDriftIndex;
+                    currentChildren.removeClass('drift');
+
+                    if (childToDriftIndex < currentChildren.size()) {
+                        // move
+                        childToDrift = currentChildren.item(childToDriftIndex);
+                        childToDrift.addClass('drift');
+                    }
+                }
+
+            }
+        },
 
         /****************************************************************************************/
         /************************************ public methods ************************************/
@@ -66,62 +112,21 @@ YUI.add('pictroid-main', function (Y) {
         /****************************************************************************************/
 
         initializer: function (cfg) {
-            var inst = this,
-                del = new Y.DD.Delegate({
+            var dragItems = new Y.DD.Delegate({
                     container: '#items',
                     nodes: 'li'
                 }),
-                drop = Y.one('#drop').plug(Y.Plugin.Drop);
+                dropContainer = Y.one('#drop').plug(Y.Plugin.Drop);
 
-            del.on('drag:end', function (e) {
-                e.preventDefault();
-            });
+            // event listeners
+            dragItems.on('drag:end', this._handleDragEnd);
+            dropContainer.drop.on('drop:hit', this._handleDropHit, this);
+            dropContainer.drop.on('drop:exit', this._handleDropExit, this);
+            dropContainer.drop.on('drop:over', this._handleDropOver, this);
 
-            drop.drop.on('drop:hit', function (e) {
-                var droppedItem = e.drag.get('node'),
-                    currentChildren = e.target.get('node').get('children'),
-                    insertionIndex = inst._calcChildToDriftIndex(inst._calcRelativeDragCenterY(e.target, e.drag));
+            // TODO: add possibility to remove/reorder item
+            // TODO: if the new item will be inserted as the last one, just make the container bigger instead of drifting an item
 
-                inst._cleanupDrifts(e.target);
-
-                if (currentChildren.size() === 0 || insertionIndex >= currentChildren.size()) {
-                    drop.append('<li class="item ' + droppedItem.getData().type + '"></li>');
-                } else {
-                    currentChildren.item(insertionIndex).insert('<li class="item ' + droppedItem.getData().type + '"></li>', 'before');
-                }
-            });
-
-            drop.drop.on('drop:exit', function (e) {
-                inst._cleanupDrifts(e.target);
-            });
-
-            drop.drop.on('drop:over', function (e) {
-                var dropTarget = e.target,
-                    currentChildren = dropTarget.get('node').get('children'),
-                    childToDriftIndex,
-                    childToDrift;
-
-                // only drift if there are actual children
-                if (currentChildren.size() > 0) {
-                    childToDriftIndex = inst._calcChildToDriftIndex(inst._calcRelativeDragCenterY(dropTarget, e.drag));
-
-                    if (inst._currentlyDriftedChildIndex !== childToDriftIndex) {
-                        inst._currentlyDriftedChildIndex = childToDriftIndex;
-                        currentChildren.removeClass('drift');
-
-                        if (childToDriftIndex < currentChildren.size()) {
-                            // move
-                            childToDrift = currentChildren.item(childToDriftIndex);
-                            childToDrift.addClass('drift');
-                        }
-                    }
-
-                }
-
-                // TODO: add possibility to remove/reorder item
-                // TODO: if the new item will be inserted as the last one, just make the container bigger instead of drifting an item
-
-            });
         },
 
         destructor: function () {

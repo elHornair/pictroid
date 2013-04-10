@@ -79,13 +79,16 @@ YUI.add('pictroid-main', function (Y) {
 
             drop.drop.on('drop:hit', function (e) {
                 var droppedItem = e.drag.get('node'),
+                    currentChildren = e.target.get('node').get('children'),
                     insertionIndex = inst._calcChildToDriftIndex(inst._calcRelativeDragCenterY(e.target, e.drag));
 
                 inst._cleanupDrifts(e.target);
 
-                // TODO: append child at correct position
-                console.log(insertionIndex);
-                drop.append('<li class="item ' + droppedItem.getData().type + '"></li>');
+                if (currentChildren.size() === 0 || insertionIndex >= currentChildren.size()) {
+                    drop.append('<li class="item ' + droppedItem.getData().type + '"></li>');
+                } else {
+                    currentChildren.item(insertionIndex).insert('<li class="item ' + droppedItem.getData().type + '"></li>', 'before');
+                }
             });
 
             drop.drop.on('drop:exit', function (e) {

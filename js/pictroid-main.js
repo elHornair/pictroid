@@ -20,7 +20,7 @@ YUI.add('pictroid-main', function (Y) {
 
     Main.ATTRS = {
         tileSize: {
-            value: 106// size in pixels, including margins
+            value: 66// size in pixels, including margins
         }
     };
 

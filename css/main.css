@@ -1,15 +1,16 @@
 .item {
-    width: 100px;
-    height: 100px;
+    width: 60px;
+    height: 60px;
     border: 1px solid black;
     cursor: move;
     list-style-type: none;
     margin: 3px;
     z-index: 2;
+    background-image:url('../img/icons.png');
+    background-color: #FFFF73;
 
-    -webkit-transition: margin 0.3s ease-in-out;
-    -moz-transition: margin 0.3s ease-in-out;
-    -o-transition: margin 0.3s ease-in-out;
+    border-radius: 10px;
+    box-shadow: 2px 2px 8px 1px rgba(0, 0, 0, 0.15);
     transition: margin 0.3s ease-in-out;
 }
 
@@ -18,16 +19,16 @@
 }
 
 .item.left {
-    background-color: red;
+    background-position: 278px 480px;
 }
 .item.right {
-    background-color: green;
+    background-position: 355px 480px;
 }
 .item.up {
-    background-color: blue;
+    background-position: 432px 480px;
 }
 .item.down {
-    background-color: #ffff00;
+    background-position: 509px 480px;
 }
 
 .item.drift {

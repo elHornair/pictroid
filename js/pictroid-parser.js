@@ -163,6 +163,7 @@ YUI.add('pictroid-parser', function (Y) {
                 replacement,
                 nextStackElement;
 
+            // TODO: add proper tests
             instructions = [
                 'repeat',
                     'two',

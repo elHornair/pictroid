@@ -164,30 +164,30 @@ YUI.add('pictroid-parser', function (Y) {
                 nextStackElement;
 
             // TODO: add proper tests
-            instructions = [
-                'repeat',
-                    'two',
-                    'left',
-                    'repeat',
-                        'infinite',
-                        'left',
-                        'up',
-                        'left',
-                        'condition',
-                            'star',
-                                'repeat',
-                                    'three',
-                                'endrepeat',
-                        'endcondition',
-                    'endrepeat',
-                    'right',
-                'endrepeat',
-                'condition',
-                    'star',
-                    'left',
-                'endcondition',
-                'left'
-            ];
+//            instructions = [
+//                'repeat',
+//                    'two',
+//                    'left',
+//                    'repeat',
+//                        'infinite',
+//                        'left',
+//                        'up',
+//                        'left',
+//                        'condition',
+//                            'star',
+//                                'repeat',
+//                                    'three',
+//                                'endrepeat',
+//                        'endcondition',
+//                    'endrepeat',
+//                    'right',
+//                'endrepeat',
+//                'condition',
+//                    'star',
+//                    'left',
+//                'endcondition',
+//                'left'
+//            ];
 
             numInstructions = instructions.length;
 

@@ -65,7 +65,7 @@ YUI.add('pictroid-main', function (Y) {
                 droppedItem = e.drag.get('node'),
                 currentChildren = dropContainer.get('node').get('children'),
                 insertionIndex = this._calcChildToDriftIndex(this._calcRelativeDragCenterY(e.target, e.drag)),
-                nodeToInsert = '<li class="item ' + droppedItem.getData().type + ' " data-type="' + droppedItem.getData().type + '"></li>';// TODO: use template
+                nodeToInsert = '<li class="' + droppedItem.getAttribute('class') + '" data-type="' + droppedItem.getData().type + '">' + droppedItem.getContent() + '</li>';// TODO: use template
 
             this._cleanupDrifts(dropContainer);
 

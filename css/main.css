@@ -30,6 +30,23 @@
 .item.down {
     background-position: 509px 480px;
 }
+.item.repeat {
+    background-position: 586px 790px;
+    background-color: #67E667;
+}
+.item.endrepeat {
+    background-position: 663px 790px;
+    background-color: #67E667;
+}
+.item.counter {
+    background-image: none;
+    background-color: #5CCCCC;
+    font-size: 36px;
+    font-weight: bold;
+    line-height: 60px;
+    text-align: center;
+    color: #555555;
+}
 
 .item.drift {
     margin-top: 50px;

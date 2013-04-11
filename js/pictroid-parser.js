@@ -28,8 +28,14 @@ YUI.add('pictroid-parser', function (Y) {
         repeat: {
             value: 'repeat'
         },
+        condition: {
+            value: 'condition'
+        },
         counter: {
             value: 'counter'
+        },
+        conditional: {
+            value: 'conditional'
         },
         left: {
             value: 'left'
@@ -52,6 +58,9 @@ YUI.add('pictroid-parser', function (Y) {
                     ['right'],
                     ['up'],
                     ['down']
+                ],
+                conditional: [
+                    ['star']
                 ],
                 counter: [
                     ['two'],
@@ -103,6 +112,9 @@ YUI.add('pictroid-parser', function (Y) {
             case this.get('repeat'):
                 return this.get('replacementRules.placeholder')[2];// repeat
                 break;
+            case this.get('condition'):
+                return this.get('replacementRules.placeholder')[3];// condition
+                break;
             case this.get('left'):
             case this.get('right'):
             case this.get('up'):
@@ -122,6 +134,11 @@ YUI.add('pictroid-parser', function (Y) {
         _getCounterReplacement: function (instructions, currentIndex) {
             var replacement = this._getReplacement(this.get('replacementRules.counter'), instructions[currentIndex]);
             return replacement || ['e_counter_expected'];
+        },
+
+        _getConditionalReplacement: function (instructions, currentIndex) {
+            var replacement = this._getReplacement(this.get('replacementRules.conditional'), instructions[currentIndex]);
+            return replacement || ['e_conditional_expected'];
         },
 
         _removePlaceholders: function (instructions) {
@@ -155,9 +172,19 @@ YUI.add('pictroid-parser', function (Y) {
                         'left',
                         'up',
                         'left',
+                        'condition',
+                            'star',
+                                'repeat',
+                                    'three',
+                                'endrepeat',
+                        'endcondition',
                     'endrepeat',
                     'right',
                 'endrepeat',
+                'condition',
+                    'star',
+                    'left',
+                'endcondition',
                 'left'
             ];
 
@@ -186,6 +213,11 @@ YUI.add('pictroid-parser', function (Y) {
                     break;
                 case this.get('counter'):
                     replacement = this._getCounterReplacement(instructions, i);
+                    stack = stack.concat(replacement);
+                    i -= 1;
+                    break;
+                case this.get('conditional'):
+                    replacement = this._getConditionalReplacement(instructions, i);
                     stack = stack.concat(replacement);
                     i -= 1;
                     break;

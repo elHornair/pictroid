@@ -97,11 +97,11 @@ YUI.add('pictroid-parser', function (Y) {
 //                    'endfor',
 //                    'test',
 //                'endfor',
-                'down'
+                'down',
+                'left'
             ];
 
             numInstructions = instructions.length;
-
 
             for (i = 0; i < numInstructions; i++) {
 
@@ -113,21 +113,21 @@ YUI.add('pictroid-parser', function (Y) {
                 Y.log("remaining stack: ");
                 Y.log(stack);
 
-                // TODO: make switch/case
-                if (nextStackElement === this.get('placeholder')) {
+                switch (nextStackElement) {
+                case this.get('placeholder'):
                     replacement = this._getPlaceholderReplacement(instructions, i);
                     stack = stack.concat(replacement);
                     i -= 1;
-                    continue;
-                } else if (nextStackElement === this.get('command')) {
+                    break;
+                case this.get('command'):
                     replacement = this._getCommandReplacement(instructions, i);
                     stack = stack.concat(replacement);
                     i -= 1;
-                    continue;
-                }
-
-                if (nextStackElement !== instructions[i]) {
-                    Y.log("error, unexpeced symbol");
+                    break;
+                default:
+                    if (nextStackElement !== instructions[i]) {
+                        Y.log("error, unexpeced symbol");
+                    }
                 }
 
             }

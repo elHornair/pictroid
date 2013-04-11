@@ -86,6 +86,18 @@ YUI.add('pictroid-parser', function (Y) {
         /*********************************** private methods ************************************/
         /****************************************************************************************/
 
+        _getReplacement: function (availableReplacements, currentInstruction) {
+            var i;
+
+            for (i = 0; i < availableReplacements.length; i++) {
+                if (availableReplacements[i][0] === currentInstruction) {
+                    return availableReplacements[i];
+                }
+            }
+
+            return null;
+        },
+
         _getPlaceholderReplacement: function (instructions, currentIndex) {
             switch (instructions[currentIndex]) {
             case this.get('repeat'):
@@ -103,30 +115,13 @@ YUI.add('pictroid-parser', function (Y) {
         },
 
         _getCommandReplacement: function (instructions, currentIndex) {
-            var i,
-                availableReplacements = this.get('replacementRules.command');
-
-            for (i = 0; i < availableReplacements.length; i++) {
-                if (availableReplacements[i][0] === instructions[currentIndex]) {
-                    return availableReplacements[i];
-                }
-            }
-
-            return ['e_command_expected'];
+            var replacement = this._getReplacement(this.get('replacementRules.command'), instructions[currentIndex]);
+            return replacement || ['e_command_expected'];// TODO: this can actually never happen - think a bit about it
         },
 
-        // TODO: refactor, because it's basically the same code as _getCommandReplacement
         _getCounterReplacement: function (instructions, currentIndex) {
-            var i,
-                availableReplacements = this.get('replacementRules.counter');
-
-            for (i = 0; i < availableReplacements.length; i++) {
-                if (availableReplacements[i][0] === instructions[currentIndex]) {
-                    return availableReplacements[i];
-                }
-            }
-
-            return ['e_counter_expected'];
+            var replacement = this._getReplacement(this.get('replacementRules.counter'), instructions[currentIndex]);
+            return replacement || ['e_counter_expected'];
         },
 
         _removePlaceholders: function (instructions) {

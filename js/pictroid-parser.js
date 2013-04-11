@@ -25,6 +25,24 @@ YUI.add('pictroid-parser', function (Y) {
         command: {
             value: 'command'
         },
+        repeat: {
+            value: 'repeat'
+        },
+        counter: {
+            value: 'counter'
+        },
+        left: {
+            value: 'left'
+        },
+        right: {
+            value: 'right'
+        },
+        up: {
+            value: 'up'
+        },
+        down: {
+            value: 'down'
+        },
         // note: commands need to be read reverse because the will directly land in the stack
         // command, placeholder needs to be ['placeholder', 'command'], because 'command must be on top of the stack'
         replacementRules: {
@@ -35,9 +53,23 @@ YUI.add('pictroid-parser', function (Y) {
                     ['up'],
                     ['down']
                 ],
+                counter: [
+                    ['two'],
+                    ['three'],
+                    ['four'],
+                    ['five'],
+                    ['six'],
+                    ['seven'],
+                    ['eight'],
+                    ['nine'],
+                    ['ten'],
+                    ['infinite']
+                ],
                 placeholder: [
-                    ['command'],
-                    ['placeholder', 'command']
+                    [],
+                    ['placeholder', 'command'],
+                    ['placeholder', 'endrepeat', 'placeholder', 'counter', 'repeat'],
+                    ['placeholder', 'endcondition', 'placeholder', 'conditional', 'condition']
                 ]
             }
         }
@@ -54,23 +86,47 @@ YUI.add('pictroid-parser', function (Y) {
         /*********************************** private methods ************************************/
         /****************************************************************************************/
 
-        _getPlaceholderReplacement: function (instructions, i) {
-            if (i === instructions.length - 1) {
-                return this.get('replacementRules.placeholder')[0];
+        _getPlaceholderReplacement: function (instructions, currentIndex) {
+            switch (instructions[currentIndex]) {
+            case this.get('repeat'):
+                return this.get('replacementRules.placeholder')[2];// repeat
+                break;
+            case this.get('left'):
+            case this.get('right'):
+            case this.get('up'):
+            case this.get('down'):
+                return this.get('replacementRules.placeholder')[1];// command and placeholder
+                break;
+            default:
+                return this.get('replacementRules.placeholder')[0];// empty
             }
-            return this.get('replacementRules.placeholder')[1];
         },
 
         _getCommandReplacement: function (instructions, currentIndex) {
             var i,
-                nextInstruction = instructions[currentIndex],
                 availableReplacements = this.get('replacementRules.command');
 
             for (i = 0; i < availableReplacements.length; i++) {
-                if (availableReplacements[i][0] === nextInstruction) {
+                if (availableReplacements[i][0] === instructions[currentIndex]) {
                     return availableReplacements[i];
                 }
             }
+
+            return ['e_command_expected'];
+        },
+
+        // TODO: refactor, because it's basically the same code as _getCommandReplacement
+        _getCounterReplacement: function (instructions, currentIndex) {
+            var i,
+                availableReplacements = this.get('replacementRules.counter');
+
+            for (i = 0; i < availableReplacements.length; i++) {
+                if (availableReplacements[i][0] === instructions[currentIndex]) {
+                    return availableReplacements[i];
+                }
+            }
+
+            return ['e_counter_expected'];
         },
 
         /****************************************************************************************/
@@ -90,14 +146,17 @@ YUI.add('pictroid-parser', function (Y) {
                 nextStackElement;
 
             instructions = [
-//                'for',
-//                    'two',
-//                    'for',
-//                        'left',
-//                    'endfor',
-//                    'test',
-//                'endfor',
-                'down',
+                'repeat',
+                    'two',
+                    'left',
+                    'repeat',
+                        'infinite',
+                        'left',
+                        'up',
+                        'left',
+                    'endrepeat',
+                    'right',
+                'endrepeat',
                 'left'
             ];
 
@@ -107,11 +166,11 @@ YUI.add('pictroid-parser', function (Y) {
 
                 nextStackElement = stack.pop();
 
-                Y.log('---------------------');
-                Y.log("instruction: " + instructions[i]);
-                Y.log("next stack element: " + nextStackElement);
-                Y.log("remaining stack: ");
-                Y.log(stack);
+//                Y.log('---------------------');
+//                Y.log("instruction: " + instructions[i]);
+//                Y.log("next stack element: " + nextStackElement);
+//                Y.log("remaining stack: ");
+//                Y.log(stack);
 
                 switch (nextStackElement) {
                 case this.get('placeholder'):
@@ -124,18 +183,24 @@ YUI.add('pictroid-parser', function (Y) {
                     stack = stack.concat(replacement);
                     i -= 1;
                     break;
+                case this.get('counter'):
+                    replacement = this._getCounterReplacement(instructions, i);
+                    stack = stack.concat(replacement);
+                    i -= 1;
+                    break;
                 default:
                     if (nextStackElement !== instructions[i]) {
-                        Y.log("error, unexpeced symbol");
+                        Y.error("Unexpeced symbol at index " + i + ". Expected " + nextStackElement + ", received " + instructions[i]);
                     }
                 }
 
             }
 
             Y.log('*****************');
-            Y.log("done checking. stack: ");
-            Y.log(stack);
-            // TODO: error if stack is not empty here
+            // TODO: remove all placeholders first and then check for empty stack
+            if (stack.length > 0) {
+                Y.error('Stack not empty. Found ' + stack);
+            }
 
         },
 

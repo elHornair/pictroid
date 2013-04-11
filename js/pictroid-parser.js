@@ -34,6 +34,20 @@ YUI.add('pictroid-parser', function (Y) {
             'down'
         ],
 
+        _numbers: [
+            'zero',
+            'one',
+            'two',
+            'three',
+            'four',
+            'five',
+            'six',
+            'seven',
+            'eight',
+            'nine',
+            'infinity'
+        ],
+
         /****************************************************************************************/
         /*********************************** private methods ************************************/
         /****************************************************************************************/
@@ -42,13 +56,19 @@ YUI.add('pictroid-parser', function (Y) {
             return this._directions.indexOf(command) !== -1;
         },
 
+        _isNumber: function (command) {
+            return this._numbers.indexOf(command) !== -1;
+        },
+
         _isForLoop: function (commandCollection) {
             // TODO: validate for loop
-            return true;
+            return commandCollection[0] === 'for' &&
+                   commandCollection[commandCollection.length - 1] === 'endfor' &&
+                   this._isNumber(commandCollection[1]);
         },
 
         _isCommand: function (command) {
-            if (command.length > 1) {
+            if (command[0] === 'for') {
                 return this._isForLoop(command);
             }
 
@@ -102,6 +122,7 @@ YUI.add('pictroid-parser', function (Y) {
 
 //            commands = [
 //                'for',
+//                    'two',
 //                    'for',
 //                        'left',
 //                    'endfor',

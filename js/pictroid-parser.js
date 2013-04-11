@@ -129,6 +129,12 @@ YUI.add('pictroid-parser', function (Y) {
             return ['e_counter_expected'];
         },
 
+        _removePlaceholders: function (instructions) {
+            return instructions.filter(function (instruction) {
+                return instruction !== this.get('placeholder');
+            }, this);
+        },
+
         /****************************************************************************************/
         /************************************ event handlers ************************************/
         /****************************************************************************************/
@@ -197,7 +203,7 @@ YUI.add('pictroid-parser', function (Y) {
             }
 
             Y.log('*****************');
-            // TODO: remove all placeholders first and then check for empty stack
+            stack = this._removePlaceholders(stack);
             if (stack.length > 0) {
                 Y.error('Stack not empty. Found ' + stack);
             }

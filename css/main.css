@@ -38,6 +38,14 @@
     background-position: 663px 790px;
     background-color: #67E667;
 }
+.item.condition {
+    background-position: 586px 790px;
+    background-color: #FF7373;
+}
+.item.endcondition {
+    background-position: 663px 790px;
+    background-color: #FF7373;
+}
 .item.counter {
     background-image: none;
     background-color: #5CCCCC;
@@ -46,6 +54,10 @@
     line-height: 60px;
     text-align: center;
     color: #555555;
+}
+.item.conditional {
+    background-position: 509px 540px;
+    background-color: #FFB273;
 }
 
 .item.drift {

@@ -87,29 +87,45 @@ YUI.add('pictroid-robot', function (Y) {
             });
         },
 
-        _runSequence: function (instructions, i) {
+        _runInstruction: function (instructions, i, callback) {
             var limit,
                 j,
+                loop,
                 loopEndIndex;
 
-            while (i < instructions.length) {
-                switch (instructions[i]) {
-                case 'repeat':
-                    limit = this._counterToInt(instructions[i + 1]);
+            if (i >= instructions.length) {
+                callback();
+                return;
+            }
 
-                    // the actual loop (the one that the user coded)
-                    for (j = 0; j < limit; j++) {
-                        loopEndIndex = this._runSequence(instructions, i + 2);
+            switch (instructions[i]) {
+            case 'repeat':
+                j = 0;
+                loopEndIndex = i + 2;
+                limit = this._counterToInt(instructions[i + 1]);
+
+                loop = function (inst) {
+                    if (j < limit) {
+                        inst._runInstruction(instructions, i + 2, function (endIndex) {
+                            loopEndIndex = endIndex;
+                            j++;
+                            loop(inst);
+                        });
+                    } else {
+                        inst._runInstruction(instructions, loopEndIndex + 1, callback);
                     }
-                    i = loopEndIndex + 1;
-                    break;
-                case 'endrepeat':
-                    return i;
-                default:
-                    this._move(instructions[i]);
-                    i++;
-                    break;
-                }
+                };
+
+                loop(this);
+                break;
+            case 'endrepeat':
+                callback(i);
+                break;
+            default:
+                this._move(instructions[i]);
+                i++;
+                Y.later(500, this, this._runInstruction, [instructions, i, callback]);
+                break;
             }
         },
 
@@ -123,7 +139,9 @@ YUI.add('pictroid-robot', function (Y) {
         /****************************************************************************************/
 
         run: function (instructions) {
-            this._runSequence(instructions, 0);
+            this._runInstruction(instructions, 0, function () {
+                Y.log('done');
+            });
         },
 
         /****************************************************************************************/

@@ -157,11 +157,12 @@ YUI.add('pictroid-parser', function (Y) {
         /****************************************************************************************/
 
         isValid: function (instructions) {
-            var i = 0,
+            var i,
                 numInstructions,
                 stack = [this.get('placeholder')],
                 replacement,
-                nextStackElement;
+                nextStackElement,
+                err = null;
 
             // TODO: add proper tests
 //            instructions = [
@@ -224,17 +225,18 @@ YUI.add('pictroid-parser', function (Y) {
                     break;
                 default:
                     if (nextStackElement !== instructions[i]) {
-                        Y.error("Unexpeced symbol at index " + i + ". Expected " + nextStackElement + ", received " + instructions[i]);
+                        err = "Unexpeced symbol at index " + i + ". Expected " + nextStackElement + ", received " + instructions[i];
                     }
                 }
 
             }
 
-            Y.log('*****************');
             stack = this._removePlaceholders(stack);
             if (stack.length > 0) {
-                Y.error('Stack not empty. Found ' + stack);
+                err = 'Stack not empty. Found ' + stack;
             }
+
+            return err || true;
 
         },
 

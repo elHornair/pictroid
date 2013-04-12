@@ -20,7 +20,14 @@ YUI.add('pictroid-main', function (Y) {
 
     Main.ATTRS = {
         tileSize: {
-            value: 66// size in pixels, including margins
+            value: 66// size in pixels, including margins (size of the programming icons)
+        },
+        robot: {
+            valueFn: function () {
+                return new Y.Pictroid.Robot({
+                    domNode: Y.one('#robot')
+                });
+            }
         }
     };
 
@@ -106,13 +113,21 @@ YUI.add('pictroid-main', function (Y) {
 
         _handleRunCodeClick: function () {
             var parser = new Y.Pictroid.Parser(),
-                commands = [];
+                instructions = [],
+                parseResult;
 
             this._dropContainer.get('children').each(function (item) {
-                commands.push(item.getData().type);
+                instructions.push(item.getData().type);
             });
 
-            parser.isValid(commands);
+            parseResult = parser.isValid(instructions);
+
+            if (parseResult === true) {
+                this.get('robot').run(instructions);
+            } else {
+                // TODO: show errors in coding area
+                Y.error('Parse error: ' + parseResult);
+            }
 
         },
 
@@ -153,5 +168,5 @@ YUI.add('pictroid-main', function (Y) {
 
     Y.namespace('Pictroid').Main = Main;
 
-}, '0.1', { requires: ['base', 'dd', 'dd-drop', 'dd-constrain', 'pictroid-parser']});
+}, '0.1', { requires: ['base', 'dd', 'dd-drop', 'dd-constrain', 'pictroid-parser', 'pictroid-robot']});
 

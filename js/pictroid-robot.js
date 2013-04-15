@@ -19,9 +19,13 @@ YUI.add('pictroid-robot', function (Y) {
     /****************************************************************************************/
 
     Robot.ATTRS = {
-        domNode: {},
+        mapNode: {},
+        robotNode: {},
         tileSize: {
             value: 60// pixels of a tile on the map
+        },
+        mapSize: {
+            value: 10// amount of tiles per dimension
         },
         counterHash: {
             value: {
@@ -34,6 +38,12 @@ YUI.add('pictroid-robot', function (Y) {
                 eight: 8,
                 nine: 9,
                 infinite: 9999 // TODO: make it really infinite somehow?
+            }
+        },
+        goal: {
+            value: {
+                x: 1,
+                y: 1
             }
         }
     };
@@ -81,7 +91,7 @@ YUI.add('pictroid-robot', function (Y) {
             this._x += deltaX;
             this._y += deltaY;
 
-            this.get('domNode').setStyles({
+            this.get('robotNode').setStyles({
                 marginLeft: (this._x * this.get('tileSize')) + 'px',
                 marginTop: (this._y * this.get('tileSize')) + 'px'
             });
@@ -123,10 +133,26 @@ YUI.add('pictroid-robot', function (Y) {
                 break;
             default:
                 this._move(instructions[i]);
-                i++;
-                Y.later(500, this, this._runInstruction, [instructions, i, callback]);
+                if (this._isGoalReached()) {
+                    Y.log('Victory!');
+                } else {
+                    i++;
+                    Y.later(500, this, this._runInstruction, [instructions, i, callback]);
+                }
                 break;
             }
+        },
+
+        _isGoalReached: function () {
+            var goal = this.get('goal');
+            return goal.x === this._x && goal.y === this._y;
+        },
+
+        _markGoal: function () {
+            var goal = this.get('goal'),
+                goalIndex = goal.y * this.get('mapSize') + goal.x;
+
+            this.get('mapNode').get('children').item(goalIndex).addClass('goal');
         },
 
         /****************************************************************************************/
@@ -149,6 +175,7 @@ YUI.add('pictroid-robot', function (Y) {
         /****************************************************************************************/
 
         initializer: function (cfg) {
+            this._markGoal();
         },
 
         destructor: function () {

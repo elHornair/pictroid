@@ -24,9 +24,13 @@ YUI.add('pictroid-main', function (Y) {
         },
         robot: {
             valueFn: function () {
-                return new Y.Pictroid.Robot({
-                    domNode: Y.one('#robot')
+                var robot =  new Y.Pictroid.Robot({
+                    mapNode: Y.one('#map'),
+                    robotNode: Y.one('#robot')
                 });
+
+                robot.init();
+                return robot;
             }
         }
     };

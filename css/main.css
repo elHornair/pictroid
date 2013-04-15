@@ -99,7 +99,7 @@
     position: absolute;
     background-image:url('../img/icons.png');
     background-position: 200px 170px;
-    transition: margin 0.45s ease-in-out;
+    transition: margin 0.15s ease-in-out;
 }
 
 #map li {

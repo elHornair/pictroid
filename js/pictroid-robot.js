@@ -21,6 +21,9 @@ YUI.add('pictroid-robot', function (Y) {
     Robot.ATTRS = {
         mapNode: {},
         robotNode: {},
+        speed: {
+            value: 200// milliseconds between two steps
+        },
         tileSize: {
             value: 60// pixels of a tile on the map
         },
@@ -137,7 +140,7 @@ YUI.add('pictroid-robot', function (Y) {
                     Y.log('Victory!');
                 } else {
                     i++;
-                    Y.later(500, this, this._runInstruction, [instructions, i, callback]);
+                    Y.later(this.get('speed'), this, this._runInstruction, [instructions, i, callback]);
                 }
                 break;
             }

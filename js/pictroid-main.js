@@ -111,10 +111,12 @@ YUI.add('pictroid-main', function (Y) {
             }
         },
 
-        _handleRunCodeClick: function () {
+        _handleRunCodeClick: function (e) {
             var parser = new Y.Pictroid.Parser(),
                 instructions = [],
                 parseResult;
+
+            e.preventDefault();
 
             this._dropContainer.get('children').each(function (item) {
                 instructions.push(item.getData().type);

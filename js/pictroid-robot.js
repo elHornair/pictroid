@@ -133,7 +133,7 @@ YUI.add('pictroid-robot', function (Y) {
                 deltaY = 1;
                 break;
             default:
-                Y.log('not a move statement');
+                Y.log('not a move statement: ' + dir);
                 break;
             }
 

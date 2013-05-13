@@ -97,8 +97,9 @@
     height: 60px;
     display: block;
     position: absolute;
-    background-image:url('../img/icons.png');
-    background-position: 200px 170px;
+    background-image:url('../img/robot.png');
+}
+.easy_move {
     transition: margin 0.15s ease-in-out;
 }
 
@@ -111,6 +112,10 @@
     background-color: #FFF3A8;
     border-bottom: 2px solid #FAF2BE;
     border-right: 2px solid #FAF2BE;
+}
+
+#map li.stone {
+    background-image:url('../img/bg_pattern_stone.png');
 }
 
 #map li.goal {

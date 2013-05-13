@@ -30,6 +30,20 @@ YUI.add('pictroid-robot', function (Y) {
         mapSize: {
             value: 10// amount of tiles per dimension
         },
+        map: {
+            value: [
+                ['1', '1', '1', '1', '1', '1', '1', '1', '1', '1'],
+                ['1', 'R', '0', '0', '0', '0', '0', '0', 'X', '1'],
+                ['1', '0', '0', '0', '0', '0', '0', '0', '0', '1'],
+                ['1', '0', '0', '0', '0', '0', '0', '0', '0', '1'],
+                ['1', '0', '0', '0', '0', '0', '0', '0', '0', '1'],
+                ['1', '0', '0', '0', '0', '0', '0', '0', '0', '1'],
+                ['1', '0', '0', '0', '0', '0', '0', '0', '0', '1'],
+                ['1', '0', '0', '0', '0', '0', '0', '0', '0', '1'],
+                ['1', '0', '0', '0', '0', '0', '0', '0', '0', '1'],
+                ['1', '1', '1', '1', '1', '1', '1', '1', '1', '1']
+            ]
+        },
         counterHash: {
             value: {
                 two: 2,
@@ -42,12 +56,6 @@ YUI.add('pictroid-robot', function (Y) {
                 nine: 9,
                 infinite: 9999 // TODO: make it really infinite somehow?
             }
-        },
-        goal: {
-            value: {
-                x: 1,
-                y: 1
-            }
         }
     };
 
@@ -59,6 +67,7 @@ YUI.add('pictroid-robot', function (Y) {
 
         _x: 0,
         _y: 0,
+        _goal: null,
 
         /****************************************************************************************/
         /*********************************** private methods ************************************/
@@ -66,6 +75,27 @@ YUI.add('pictroid-robot', function (Y) {
 
         _counterToInt: function (counter) {
             return this.get('counterHash')[counter];
+        },
+
+        _setPos: function (pos, hard) {
+            this._x = pos.x;
+            this._y = pos.y;
+
+            if (hard) {
+                this.get('robotNode').removeClass('easy_move');
+                Y.log("hard");
+            }
+
+            this.get('robotNode').setStyles({
+                marginLeft: (this._x * this.get('tileSize')) + 'px',
+                marginTop: (this._y * this.get('tileSize')) + 'px'
+            });
+
+            if (hard) {
+                Y.later(this.get('speed') / 2, this, function () {
+                    this.get('robotNode').addClass('easy_move');
+                });
+            }
         },
 
         _move: function (dir) {
@@ -91,12 +121,9 @@ YUI.add('pictroid-robot', function (Y) {
                 break;
             }
 
-            this._x += deltaX;
-            this._y += deltaY;
-
-            this.get('robotNode').setStyles({
-                marginLeft: (this._x * this.get('tileSize')) + 'px',
-                marginTop: (this._y * this.get('tileSize')) + 'px'
+            this._setPos({
+                x: this._x + deltaX,
+                y: this._y + deltaY
             });
         },
 
@@ -147,15 +174,50 @@ YUI.add('pictroid-robot', function (Y) {
         },
 
         _isGoalReached: function () {
-            var goal = this.get('goal');
-            return goal.x === this._x && goal.y === this._y;
+            return this._goal.x === this._x && this._goal.y === this._y;
         },
 
-        _markGoal: function () {
-            var goal = this.get('goal'),
-                goalIndex = goal.y * this.get('mapSize') + goal.x;
+        _indexFromCoordinates: function (x, y) {
+            return y * this.get('mapSize') + x;
+        },
 
+        _setGoal: function (goal) {
+            var goalIndex = goal.y * this.get('mapSize') + goal.x;
             this.get('mapNode').get('children').item(goalIndex).addClass('goal');
+            this._goal = goal;
+        },
+
+        // TODO: refactor map related stuff into map module
+        _drawMap: function () {
+            var i,
+                j,
+                map = this.get('map'),
+                mapNodes = this.get('mapNode').get('children');
+
+            for (i = 0; i < map.length; i++) {
+                for (j = 0; j < map[0].length; j++) {
+                    switch (map[i][j]) {
+                    case '1':
+                        mapNodes.item(this._indexFromCoordinates(j, i)).addClass('stone');
+                        break
+                    case 'X':
+                        this._setGoal({
+                            x: j,
+                            y: i
+                        });
+                        break;
+                    case 'R':
+                        this._setPos({
+                            x: j,
+                            y: i
+                        }, true);
+                        break;
+                    default:
+                        break;
+                    }
+                }
+            }
+            // TODO: introduce rotation
         },
 
         /****************************************************************************************/
@@ -178,7 +240,7 @@ YUI.add('pictroid-robot', function (Y) {
         /****************************************************************************************/
 
         initializer: function (cfg) {
-            this._markGoal();
+            this._drawMap();
         },
 
         destructor: function () {

@@ -99,8 +99,41 @@
     position: absolute;
     background-image:url('../img/robot.png');
 }
+#robot.right {
+    transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+}
+#robot.left {
+    transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+}
+#robot.up {
+    transform: rotate(-90deg);
+    -ms-transform: rotate(-90deg);
+    -webkit-transform: rotate(-90deg);
+    -o-transform: rotate(-90deg);
+    -moz-transform: rotate(-90deg);
+}
+#robot.down {
+    transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    -webkit-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+}
+
 .easy_move {
-    transition: margin 0.15s ease-in-out;
+    transition: margin 0.15s ease-in-out, transform 0.15s ease-in-out;
+    -ms-transition: margin 0.15s ease-in-out, -ms-transform 0.15s ease-in-out;
+    -webkit-transition: margin 0.15s ease-in-out, -webkit-transform 0.15s ease-in-out;
+    -o-transition: margin 0.15s ease-in-out, o-transform 0.15s ease-in-out;
+    -moz-transition: margin 0.15s ease-in-out, -moz-transform 0.15s ease-in-out;
 }
 
 #map li {

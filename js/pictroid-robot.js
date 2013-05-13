@@ -67,6 +67,7 @@ YUI.add('pictroid-robot', function (Y) {
 
         _x: 0,
         _y: 0,
+        _dir: 'right',
         _goal: null,
 
         /****************************************************************************************/
@@ -75,6 +76,13 @@ YUI.add('pictroid-robot', function (Y) {
 
         _counterToInt: function (counter) {
             return this.get('counterHash')[counter];
+        },
+
+        _deltasToDir: function (deltaX, deltaY) {
+            if (deltaX !== 0) {
+                return deltaX === 1 ? 'right' : 'left';
+            }
+            return deltaY === 1 ? 'down' : 'up';
         },
 
         _setPos: function (pos, hard) {
@@ -98,11 +106,19 @@ YUI.add('pictroid-robot', function (Y) {
             }
         },
 
+        _setRotation: function (newDir) {
+            this.get('robotNode').removeClass(this._dir);
+            this.get('robotNode').addClass(newDir);
+            this._dir = newDir;
+        },
+
         _move: function (dir) {
             var deltaX = 0,
-                deltaY = 0;
+                deltaY = 0,
+                newDir;
 
             // TODO: use constants from parser here
+            // check what direction to go
             switch (dir) {
             case 'left':
                 deltaX = -1;
@@ -121,10 +137,17 @@ YUI.add('pictroid-robot', function (Y) {
                 break;
             }
 
-            this._setPos({
-                x: this._x + deltaX,
-                y: this._y + deltaY
-            });
+            // check if we have to rotate
+            newDir = this._deltasToDir(deltaX, deltaY);
+
+            if (newDir === this._dir) {
+                this._setPos({
+                    x: this._x + deltaX,
+                    y: this._y + deltaY
+                });
+            } else {
+                this._setRotation(newDir);
+            }
         },
 
         _runInstruction: function (instructions, i, callback) {
@@ -217,7 +240,6 @@ YUI.add('pictroid-robot', function (Y) {
                     }
                 }
             }
-            // TODO: introduce rotation
         },
 
         /****************************************************************************************/

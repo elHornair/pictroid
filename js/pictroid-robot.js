@@ -78,20 +78,12 @@ YUI.add('pictroid-robot', function (Y) {
             return this.get('counterHash')[counter];
         },
 
-        _deltasToDir: function (deltaX, deltaY) {
-            if (deltaX !== 0) {
-                return deltaX === 1 ? 'right' : 'left';
-            }
-            return deltaY === 1 ? 'down' : 'up';
-        },
-
         _setPos: function (pos, hard) {
             this._x = pos.x;
             this._y = pos.y;
 
             if (hard) {
                 this.get('robotNode').removeClass('easy_move');
-                Y.log("hard");
             }
 
             this.get('robotNode').setStyles({
@@ -114,8 +106,7 @@ YUI.add('pictroid-robot', function (Y) {
 
         _move: function (dir) {
             var deltaX = 0,
-                deltaY = 0,
-                newOrientation;
+                deltaY = 0;
 
             // TODO: use constants from parser here
             // check what direction to go
@@ -125,7 +116,7 @@ YUI.add('pictroid-robot', function (Y) {
                 break;
             case 'right':
                 deltaX = 1;
-                break;
+                break
             case 'up':
                 deltaY = -1;
                 break;
@@ -133,20 +124,19 @@ YUI.add('pictroid-robot', function (Y) {
                 deltaY = 1;
                 break;
             default:
+                // TODO: log error at least
                 Y.log('not a move statement: ' + dir);
                 break;
             }
 
-            // calculate new orientation
-            newOrientation = this._deltasToDir(deltaX, deltaY);
-
-            if (newOrientation === this._orientation) {
+            if (dir === this._orientation) {
+                // TODO: check here if allowed to move and only move if allowed. otherwise jump or something
                 this._setPos({
                     x: this._x + deltaX,
                     y: this._y + deltaY
                 });
             } else {
-                this._setOrientation(newOrientation);
+                this._setOrientation(dir);
             }
         },
 

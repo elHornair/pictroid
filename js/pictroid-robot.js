@@ -67,7 +67,7 @@ YUI.add('pictroid-robot', function (Y) {
 
         _x: 0,
         _y: 0,
-        _dir: 'right',
+        _orientation: 'right',
         _goal: null,
 
         /****************************************************************************************/
@@ -106,16 +106,16 @@ YUI.add('pictroid-robot', function (Y) {
             }
         },
 
-        _setRotation: function (newDir) {
-            this.get('robotNode').removeClass(this._dir);
-            this.get('robotNode').addClass(newDir);
-            this._dir = newDir;
+        _setOrientation: function (newOrientation) {
+            this.get('robotNode').removeClass(this._orientation);
+            this.get('robotNode').addClass(newOrientation);
+            this._orientation = newOrientation;
         },
 
         _move: function (dir) {
             var deltaX = 0,
                 deltaY = 0,
-                newDir;
+                newOrientation;
 
             // TODO: use constants from parser here
             // check what direction to go
@@ -137,16 +137,16 @@ YUI.add('pictroid-robot', function (Y) {
                 break;
             }
 
-            // check if we have to rotate
-            newDir = this._deltasToDir(deltaX, deltaY);
+            // calculate new orientation
+            newOrientation = this._deltasToDir(deltaX, deltaY);
 
-            if (newDir === this._dir) {
+            if (newOrientation === this._orientation) {
                 this._setPos({
                     x: this._x + deltaX,
                     y: this._y + deltaY
                 });
             } else {
-                this._setRotation(newDir);
+                this._setOrientation(newOrientation);
             }
         },
 

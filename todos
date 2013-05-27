@@ -3,7 +3,7 @@
 - Syntaxfehler irgendwie anzeigen: Roter Pfeil oder so
 - Dragndrop: Removen möglich machen
 - browsercheck
-- Installationsinstruktionen irgendwo reinpappen: Doku?
+- Keine Vendors mehr: bootstrap reinpappen, yui über CDN laden
 - 3 Levels
 - Grafiken anpassen (icons, steine, roboter?)
 - Nice2have: Autom. Einrücken von einzelnen programmbefehlen

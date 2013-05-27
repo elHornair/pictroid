@@ -1,7 +1,6 @@
 - conditions/conditionals
-- Reset-Button (toggle mit start-button)
-- Syntaxfehler irgendwie anzeigen: Roter Pfeil oder so
 - Dragndrop: Removen möglich machen
+- Syntaxfehler irgendwie anzeigen: Roter Pfeil oder so
 - browsercheck
 - Keine Vendors mehr: bootstrap reinpappen, yui über CDN laden
 - 3 Levels

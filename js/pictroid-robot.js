@@ -67,8 +67,11 @@ YUI.add('pictroid-robot', function (Y) {
 
         _x: 0,
         _y: 0,
+        _startX: 0,
+        _startY: 0,
         _orientation: 'right',
         _goal: null,
+        _reset: false,
 
         STONE: '1',
         GOAL: 'X',
@@ -175,6 +178,10 @@ YUI.add('pictroid-robot', function (Y) {
                 loop,
                 loopEndIndex;
 
+            if (this._reset) {
+                return;
+            }
+
             if (i >= instructions.length) {
                 callback();
                 return;
@@ -249,9 +256,11 @@ YUI.add('pictroid-robot', function (Y) {
                         });
                         break;
                     case this.ROBOT:
+                        this._startX = j;
+                        this._startY = i;
                         this._setPos({
-                            x: j,
-                            y: i
+                            x: this._startX,
+                            y: this._startY
                         }, true);
                         break;
                     default:
@@ -271,9 +280,19 @@ YUI.add('pictroid-robot', function (Y) {
         /****************************************************************************************/
 
         run: function (instructions) {
+            this._reset = false;
             this._runInstruction(instructions, 0, function () {
                 Y.log('done');
             });
+        },
+
+        reset: function () {
+            this._reset = true;
+            this._setOrientation('right');
+            this._setPos({
+                x: this._startX,
+                y: this._startY
+            }, true);
         },
 
         /****************************************************************************************/

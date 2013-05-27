@@ -115,12 +115,18 @@ YUI.add('pictroid-main', function (Y) {
             }
         },
 
+        _swapButtons: function () {
+            Y.one('#btn_reset').toggleClass('hidden');
+            Y.one('#btn_run_code').toggleClass('hidden');
+        },
+
         _handleRunCodeClick: function (e) {
             var parser = new Y.Pictroid.Parser(),
                 instructions = [],
                 parseResult;
 
             e.preventDefault();
+            this._swapButtons();
 
             this._dropContainer.get('children').each(function (item) {
                 instructions.push(item.getData().type);
@@ -134,8 +140,13 @@ YUI.add('pictroid-main', function (Y) {
                 // TODO: show errors in coding area
                 Y.error('Parse error: ' + parseResult);
             }
-
         },
+
+        _handleResetClick: function (e) {
+            this._swapButtons();
+            this.get('robot').reset();
+        },
+
 
         /****************************************************************************************/
         /************************************ public methods ************************************/
@@ -161,6 +172,7 @@ YUI.add('pictroid-main', function (Y) {
             this._dropContainer .drop.on('drop:over', this._handleDropOver, this);
 
             Y.one('#btn_run_code').on('click', this._handleRunCodeClick, this);
+            Y.one('#btn_reset').on('click', this._handleResetClick, this);
 
             // TODO: add possibility to remove/reorder item
             // TODO: if the new item will be inserted as the last one, just make the container bigger instead of drifting an item

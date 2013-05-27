@@ -70,6 +70,10 @@ YUI.add('pictroid-robot', function (Y) {
         _orientation: 'right',
         _goal: null,
 
+        STONE: '1',
+        GOAL: 'X',
+        ROBOT: 'R',
+
         /****************************************************************************************/
         /*********************************** private methods ************************************/
         /****************************************************************************************/
@@ -104,19 +108,26 @@ YUI.add('pictroid-robot', function (Y) {
             this._orientation = newOrientation;
         },
 
-        _move: function (dir) {
+        _getNextFieldItem: function () {
+            var deltaObj = this._dirToDeltaObj(this._orientation),
+                nextFieldX = this._x + deltaObj.deltaX,
+                nextFieldY = this._y + deltaObj.deltaY,
+                map = this.get('map');
+
+            return map[nextFieldY][nextFieldX];
+        },
+
+        _dirToDeltaObj: function (dir) {
             var deltaX = 0,
                 deltaY = 0;
 
-            // TODO: use constants from parser here
-            // check what direction to go
             switch (dir) {
             case 'left':
                 deltaX = -1;
                 break;
             case 'right':
                 deltaX = 1;
-                break
+                break;
             case 'up':
                 deltaY = -1;
                 break;
@@ -125,16 +136,34 @@ YUI.add('pictroid-robot', function (Y) {
                 break;
             default:
                 // TODO: log error at least
-                Y.log('not a move statement: ' + dir);
+                Y.error('not a move statement: ' + dir);
                 break;
             }
 
+            return {
+                deltaX: deltaX,
+                deltaY: deltaY
+            };
+        },
+
+        _move: function (dir) {
+            var deltaObj;
+
+            // check what direction to go
+            deltaObj = this._dirToDeltaObj(dir);
+
             if (dir === this._orientation) {
-                // TODO: check here if allowed to move and only move if allowed. otherwise jump or something
-                this._setPos({
-                    x: this._x + deltaX,
-                    y: this._y + deltaY
-                });
+                if (this._getNextFieldItem() !== this.STONE) {
+                    this._setPos({
+                        x: this._x + deltaObj.deltaX,
+                        y: this._y + deltaObj.deltaY
+                    });
+                } else {
+                    this.get('robotNode').addClass('error');
+                    Y.later(this.get('speed') / 2, this, function () {
+                        this.get('robotNode').removeClass('error');
+                    });
+                }
             } else {
                 this._setOrientation(dir);
             }
@@ -210,16 +239,16 @@ YUI.add('pictroid-robot', function (Y) {
             for (i = 0; i < map.length; i++) {
                 for (j = 0; j < map[0].length; j++) {
                     switch (map[i][j]) {
-                    case '1':
+                    case this.STONE:
                         mapNodes.item(this._indexFromCoordinates(j, i)).addClass('stone');
                         break
-                    case 'X':
+                    case this.GOAL:
                         this._setGoal({
                             x: j,
                             y: i
                         });
                         break;
-                    case 'R':
+                    case this.ROBOT:
                         this._setPos({
                             x: j,
                             y: i

@@ -127,13 +127,21 @@
     -o-transform: rotate(90deg);
     -moz-transform: rotate(90deg);
 }
+#robot.error {
+    background-color: rgba(255, 0, 0, 0.5);
+    transition: none;
+    -ms-transition: none;
+    -webkit-transition: none;
+    -o-transition: none;
+    -moz-transition: none;
+}
 
 .easy_move {
-    transition: margin 0.15s ease-in-out, transform 0.15s ease-in-out;
-    -ms-transition: margin 0.15s ease-in-out, -ms-transform 0.15s ease-in-out;
-    -webkit-transition: margin 0.15s ease-in-out, -webkit-transform 0.15s ease-in-out;
-    -o-transition: margin 0.15s ease-in-out, o-transform 0.15s ease-in-out;
-    -moz-transition: margin 0.15s ease-in-out, -moz-transform 0.15s ease-in-out;
+    transition: background-color 0.25s ease-in-out, margin 0.15s ease-in-out, transform 0.15s ease-in-out;
+    -ms-transition: background-color 0.25s ease-in-out, margin 0.15s ease-in-out, -ms-transform 0.15s ease-in-out;
+    -webkit-transition: background-color 0.25s ease-in-out, margin 0.15s ease-in-out, -webkit-transform 0.15s ease-in-out;
+    -o-transition: background-color 0.25s ease-in-out, margin 0.15s ease-in-out, o-transform 0.15s ease-in-out;
+    -moz-transition: background-color 0.25s ease-in-out, margin 0.15s ease-in-out, -moz-transform 0.15s ease-in-out;
 }
 
 #map li {

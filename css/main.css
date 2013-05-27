@@ -1,3 +1,4 @@
+/* drag'n'drop and symbols */
 .item {
     width: 60px;
     height: 60px;
@@ -30,6 +31,35 @@
 .item.down {
     background-position: 509px 480px;
 }
+.item.repeat {
+    background-position: 586px 790px;
+    background-color: #67E667;
+}
+.item.endrepeat {
+    background-position: 663px 790px;
+    background-color: #67E667;
+}
+.item.condition {
+    background-position: 586px 790px;
+    background-color: #FF7373;
+}
+.item.endcondition {
+    background-position: 663px 790px;
+    background-color: #FF7373;
+}
+.item.counter {
+    background-image: none;
+    background-color: #5CCCCC;
+    font-size: 36px;
+    font-weight: bold;
+    line-height: 60px;
+    text-align: center;
+    color: #555555;
+}
+.item.conditional {
+    background-position: 509px 540px;
+    background-color: #FFB273;
+}
 
 .item.drift {
     margin-top: 50px;
@@ -51,4 +81,85 @@
 
 #drop.yui3-dd-drop-over {
     background-color: #ccc;
+}
+
+/* map */
+
+#map {
+    margin: 0;
+    padding: 0;
+    width:  600px;
+    height:  600px;
+}
+
+#robot {
+    width: 60px;
+    height: 60px;
+    display: block;
+    position: absolute;
+    background-image:url('../img/robot.png');
+}
+#robot.right {
+    transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+}
+#robot.left {
+    transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+}
+#robot.up {
+    transform: rotate(-90deg);
+    -ms-transform: rotate(-90deg);
+    -webkit-transform: rotate(-90deg);
+    -o-transform: rotate(-90deg);
+    -moz-transform: rotate(-90deg);
+}
+#robot.down {
+    transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    -webkit-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+}
+#robot.error {
+    background-color: rgba(255, 0, 0, 0.5);
+    transition: none;
+    -ms-transition: none;
+    -webkit-transition: none;
+    -o-transition: none;
+    -moz-transition: none;
+}
+
+.easy_move {
+    transition: background-color 0.25s ease-in-out, margin 0.15s ease-in-out, transform 0.15s ease-in-out;
+    -ms-transition: background-color 0.25s ease-in-out, margin 0.15s ease-in-out, -ms-transform 0.15s ease-in-out;
+    -webkit-transition: background-color 0.25s ease-in-out, margin 0.15s ease-in-out, -webkit-transform 0.15s ease-in-out;
+    -o-transition: background-color 0.25s ease-in-out, margin 0.15s ease-in-out, o-transform 0.15s ease-in-out;
+    -moz-transition: background-color 0.25s ease-in-out, margin 0.15s ease-in-out, -moz-transform 0.15s ease-in-out;
+}
+
+#map li {
+    list-style-type: none;
+    float: left;
+    width: 58px;
+    height: 58px;
+    background-image:url('../img/bg_pattern.png');
+    background-color: #FFF3A8;
+    border-bottom: 2px solid #FAF2BE;
+    border-right: 2px solid #FAF2BE;
+}
+
+#map li.stone {
+    background-image:url('../img/bg_pattern_stone.png');
+}
+
+#map li.goal {
+    background-image:url('../img/bg_pattern_green.png');
+    background-position: 278px 480px;
 }

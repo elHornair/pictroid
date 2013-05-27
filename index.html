@@ -30,26 +30,43 @@
 
         <div class="row-fluid">
             <div class="span4">
-
                 <div id="items">
                     <ul>
                         <li class="item left" data-type="left"></li>
                         <li class="item right" data-type="right"></li>
                         <li class="item up" data-type="up"></li>
                         <li class="item down" data-type="down"></li>
+                        <li class="item repeat" data-type="repeat"></li>
+                        <li class="item endrepeat" data-type="endrepeat"></li>
+                        <li class="item condition" data-type="condition"></li>
+                        <li class="item endcondition" data-type="endcondition"></li>
+                        <li class="item counter two" data-type="two">2</li>
+                        <li class="item counter three" data-type="three">3</li>
+                        <li class="item conditional star" data-type="star"></li>
                     </ul>
                 </div>
-
                 <ul id="drop">
                 </ul>
-
             </div>
-            <div class="span2">
+            <div class="span1">
                 <a href="#" id="btn_run_code" class="btn">Run Code</a>
             </div>
-            <div class="span6">
-                Robot
+            <div class="span7">
+                <span id="robot" class="easy_move right"></span>
+                <ul id="map">
+                    <li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li>
+                    <li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li>
+                    <li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li>
+                    <li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li>
+                    <li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li>
+                    <li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li>
+                    <li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li>
+                    <li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li>
+                    <li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li>
+                    <li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li>
+                </ul>
             </div>
+        </div>
 
         <div class="footer">
             <p>&copy; yeah whatever</p>
@@ -60,6 +77,7 @@
     <script src="vendor/yui/build/yui/yui-min.js"></script>
     <script src="js/pictroid-main.js"></script>
     <script src="js/pictroid-parser.js"></script>
+    <script src="js/pictroid-robot.js"></script>
 
     <script>
         /*global YUI */

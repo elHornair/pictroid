@@ -19,6 +19,69 @@ YUI.add('pictroid-parser', function (Y) {
     /****************************************************************************************/
 
     Parser.ATTRS = {
+        placeholder: {
+            value: 'placeholder'
+        },
+        command: {
+            value: 'command'
+        },
+        repeat: {
+            value: 'repeat'
+        },
+        condition: {
+            value: 'condition'
+        },
+        counter: {
+            value: 'counter'
+        },
+        conditional: {
+            value: 'conditional'
+        },
+        left: {
+            value: 'left'
+        },
+        right: {
+            value: 'right'
+        },
+        up: {
+            value: 'up'
+        },
+        down: {
+            value: 'down'
+        },
+        // note: commands need to be read reverse because the will directly land in the stack
+        // command, placeholder needs to be ['placeholder', 'command'], because 'command must be on top of the stack'
+        replacementRules: {
+            value: {
+                command: [
+                    ['left'],
+                    ['right'],
+                    ['up'],
+                    ['down']
+                ],
+                conditional: [
+                    ['star']
+                ],
+                counter: [
+                    ['two'],
+                    ['three'],
+                    ['four'],
+                    ['five'],
+                    ['six'],
+                    ['seven'],
+                    ['eight'],
+                    ['nine'],
+                    ['ten'],
+                    ['infinite']
+                ],
+                placeholder: [
+                    [],
+                    ['placeholder', 'command'],
+                    ['placeholder', 'endrepeat', 'placeholder', 'counter', 'repeat'],
+                    ['placeholder', 'endcondition', 'placeholder', 'conditional', 'condition']
+                ]
+            }
+        }
     };
 
     Y.extend(Parser, Y.Base, {
@@ -27,84 +90,61 @@ YUI.add('pictroid-parser', function (Y) {
         /*********************************** private members ************************************/
         /****************************************************************************************/
 
-        _directions: [
-            'left',
-            'right',
-            'up',
-            'down'
-        ],
-
-        _numbers: [
-            'zero',
-            'one',
-            'two',
-            'three',
-            'four',
-            'five',
-            'six',
-            'seven',
-            'eight',
-            'nine',
-            'infinity'
-        ],
 
         /****************************************************************************************/
         /*********************************** private methods ************************************/
         /****************************************************************************************/
 
-        _isDirection: function (command) {
-            return this._directions.indexOf(command) !== -1;
-        },
+        _getReplacement: function (availableReplacements, currentInstruction) {
+            var i;
 
-        _isNumber: function (command) {
-            return this._numbers.indexOf(command) !== -1;
-        },
-
-        _isForLoop: function (commandCollection) {
-            // TODO: validate for loop
-            return commandCollection[0] === 'for' &&
-                   commandCollection[commandCollection.length - 1] === 'endfor' &&
-                   this._isNumber(commandCollection[1]);
-        },
-
-        _isCommand: function (command) {
-            if (command[0] === 'for') {
-                return this._isForLoop(command);
+            for (i = 0; i < availableReplacements.length; i++) {
+                if (availableReplacements[i][0] === currentInstruction) {
+                    return availableReplacements[i];
+                }
             }
 
-            return this._isDirection(command[0]);
+            return null;
         },
 
-        _extractNextCommandCollection: function (commands, i) {
-            var commandCollection = [],
-                nestingLevel = 0;
-
-            switch (commands[i]) {
-            case 'for':
-                while (i < commands.length) {
-                    commandCollection.push(commands[i]);
-
-                    if (commands[i] === 'for') {
-                        nestingLevel += 1;
-                    } else if (commands[i] === 'endfor') {
-                        nestingLevel -= 1;
-                    }
-
-                    if (nestingLevel === 0) {
-                        break;
-                    }
-                    i += 1;
-                }
+        _getPlaceholderReplacement: function (instructions, currentIndex) {
+            switch (instructions[currentIndex]) {
+            case this.get('repeat'):
+                return this.get('replacementRules.placeholder')[2];// repeat
                 break;
-            case 'if':
-                // TODO: search for "endif" keyword
+            case this.get('condition'):
+                return this.get('replacementRules.placeholder')[3];// condition
+                break;
+            case this.get('left'):
+            case this.get('right'):
+            case this.get('up'):
+            case this.get('down'):
+                return this.get('replacementRules.placeholder')[1];// command and placeholder
                 break;
             default:
-                commandCollection.push(commands[i]);
-                break;
+                return this.get('replacementRules.placeholder')[0];// empty
             }
+        },
 
-            return commandCollection;
+        _getCommandReplacement: function (instructions, currentIndex) {
+            var replacement = this._getReplacement(this.get('replacementRules.command'), instructions[currentIndex]);
+            return replacement || ['e_command_expected'];// TODO: this can actually never happen - think a bit about it
+        },
+
+        _getCounterReplacement: function (instructions, currentIndex) {
+            var replacement = this._getReplacement(this.get('replacementRules.counter'), instructions[currentIndex]);
+            return replacement || ['e_counter_expected'];
+        },
+
+        _getConditionalReplacement: function (instructions, currentIndex) {
+            var replacement = this._getReplacement(this.get('replacementRules.conditional'), instructions[currentIndex]);
+            return replacement || ['e_conditional_expected'];
+        },
+
+        _removePlaceholders: function (instructions) {
+            return instructions.filter(function (instruction) {
+                return instruction !== this.get('placeholder');
+            }, this);
         },
 
         /****************************************************************************************/
@@ -116,32 +156,87 @@ YUI.add('pictroid-parser', function (Y) {
         /************************************ public methods ************************************/
         /****************************************************************************************/
 
-        isValid: function (commands) {
-            var i = 0,
-                commandToCheck;
+        isValid: function (instructions) {
+            var i,
+                numInstructions,
+                stack = [this.get('placeholder')],
+                replacement,
+                nextStackElement,
+                err = null;
 
-//            commands = [
-//                'for',
+            // TODO: add proper tests
+//            instructions = [
+//                'repeat',
 //                    'two',
-//                    'for',
+//                    'left',
+//                    'repeat',
+//                        'infinite',
 //                        'left',
-//                    'endfor',
-//                    'test',
-//                'endfor',
-//                'right'
+//                        'up',
+//                        'left',
+//                        'condition',
+//                            'star',
+//                                'repeat',
+//                                    'three',
+//                                'endrepeat',
+//                        'endcondition',
+//                    'endrepeat',
+//                    'right',
+//                'endrepeat',
+//                'condition',
+//                    'star',
+//                    'left',
+//                'endcondition',
+//                'left'
 //            ];
 
-            while (i < commands.length) {
-                commandToCheck = this._extractNextCommandCollection(commands, i);
-                if (!this._isCommand(commandToCheck)) {
-                    Y.log('Error at command nr: ' + i);
-                    Y.log(commandToCheck);
+            numInstructions = instructions.length;
+
+            for (i = 0; i < numInstructions; i++) {
+
+                nextStackElement = stack.pop();
+
+//                Y.log('---------------------');
+//                Y.log("instruction: " + instructions[i]);
+//                Y.log("next stack element: " + nextStackElement);
+//                Y.log("remaining stack: ");
+//                Y.log(stack);
+
+                switch (nextStackElement) {
+                case this.get('placeholder'):
+                    replacement = this._getPlaceholderReplacement(instructions, i);
+                    stack = stack.concat(replacement);
+                    i -= 1;
                     break;
+                case this.get('command'):
+                    replacement = this._getCommandReplacement(instructions, i);
+                    stack = stack.concat(replacement);
+                    i -= 1;
+                    break;
+                case this.get('counter'):
+                    replacement = this._getCounterReplacement(instructions, i);
+                    stack = stack.concat(replacement);
+                    i -= 1;
+                    break;
+                case this.get('conditional'):
+                    replacement = this._getConditionalReplacement(instructions, i);
+                    stack = stack.concat(replacement);
+                    i -= 1;
+                    break;
+                default:
+                    if (nextStackElement !== instructions[i]) {
+                        err = "Unexpeced symbol at index " + i + ". Expected " + nextStackElement + ", received " + instructions[i];
+                    }
                 }
-                i += commandToCheck.length;
+
             }
 
-            Y.log("done checking");
+            stack = this._removePlaceholders(stack);
+            if (stack.length > 0) {
+                err = 'Stack not empty. Found ' + stack;
+            }
+
+            return err || true;
 
         },
 

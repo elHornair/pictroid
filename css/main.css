@@ -57,8 +57,13 @@
     color: #555555;
 }
 .item.conditional {
-    background-position: 509px 540px;
     background-color: #FFB273;
+}
+.item.stone {
+    background-position: 509px 540px;
+}
+.item.field {
+    background-position: 509px 420px;
 }
 
 .item.drift {

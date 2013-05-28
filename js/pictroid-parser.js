@@ -60,7 +60,8 @@ YUI.add('pictroid-parser', function (Y) {
                     ['down']
                 ],
                 conditional: [
-                    ['star']
+                    ['stone'],
+                    ['field']
                 ],
                 counter: [
                     ['two'],

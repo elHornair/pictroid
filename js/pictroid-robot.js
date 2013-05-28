@@ -73,6 +73,7 @@ YUI.add('pictroid-robot', function (Y) {
         _goal: null,
         _reset: false,
 
+        FIELD: '0',
         STONE: '1',
         GOAL: 'X',
         ROBOT: 'R',
@@ -209,6 +210,22 @@ YUI.add('pictroid-robot', function (Y) {
                 break;
             case 'endrepeat':
                 callback(i);
+                break;
+            case 'condition':
+                // check if condition is fulfilled
+                if ((instructions[i + 1] === 'stone' && this._getNextFieldItem() === this.STONE) ||// stone
+                        (instructions[i + 1] === 'field' && this._getNextFieldItem() === this.FIELD)) {// field
+                    this._runInstruction(instructions, i + 2, callback);
+                } else {
+                    j = i;
+                    while (instructions[j] !== 'endcondition') {
+                        j++;
+                    }
+                    this._runInstruction(instructions, j + 1, callback);
+                }
+                break;
+            case 'endcondition':
+                callback();
                 break;
             default:
                 this._move(instructions[i]);

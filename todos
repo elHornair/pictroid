@@ -1,8 +1,10 @@
-- conditions/conditionals
+- Andere numbers hinzufügen (zumindest infinite)
+- Dragndrop: moven möglich machen
 - Dragndrop: Removen möglich machen
 - Syntaxfehler irgendwie anzeigen: Roter Pfeil oder so
 - browsercheck
 - Keine Vendors mehr: bootstrap reinpappen, yui über CDN laden
 - 3 Levels
 - Grafiken anpassen (icons, steine, roboter?)
+- Layout ein bisschen nett machen
 - Nice2have: Autom. Einrücken von einzelnen programmbefehlen

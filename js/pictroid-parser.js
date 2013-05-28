@@ -197,12 +197,6 @@ YUI.add('pictroid-parser', function (Y) {
 
                 nextStackElement = stack.pop();
 
-//                Y.log('---------------------');
-//                Y.log("instruction: " + instructions[i]);
-//                Y.log("next stack element: " + nextStackElement);
-//                Y.log("remaining stack: ");
-//                Y.log(stack);
-
                 switch (nextStackElement) {
                 case this.get('placeholder'):
                     replacement = this._getPlaceholderReplacement(instructions, i);

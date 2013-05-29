@@ -115,7 +115,7 @@ YUI.add('pictroid-main', function (Y) {
             }
         },
 
-        _swapButtons: function () {
+        _swapRobotControlButtons: function () {
             Y.one('#btn_reset').toggleClass('hidden');
             Y.one('#btn_run_code').toggleClass('hidden');
         },
@@ -126,7 +126,7 @@ YUI.add('pictroid-main', function (Y) {
                 parseResult;
 
             e.preventDefault();
-            this._swapButtons();
+            this._swapRobotControlButtons();
 
             this._dropContainer.get('children').each(function (item) {
                 instructions.push(item.getData().type);
@@ -143,8 +143,24 @@ YUI.add('pictroid-main', function (Y) {
         },
 
         _handleResetClick: function (e) {
-            this._swapButtons();
+            this._swapRobotControlButtons();
             this.get('robot').reset();
+        },
+
+        _handleLevelBtClick: function (e) {
+            var levelId;
+
+            e.preventDefault();
+
+            if (Y.one('#btn_run_code').hasClass('hidden')) {
+                this._swapRobotControlButtons();
+            }
+
+            Y.all('.bt-level').get('parentNode').removeClass('active');
+            e.target.get('parentNode').addClass('active');
+
+            levelId = parseInt(e.target.getData('level'), 10);
+            this.get('robot').setMap(levelId);
         },
 
 
@@ -173,6 +189,8 @@ YUI.add('pictroid-main', function (Y) {
 
             Y.one('#btn_run_code').on('click', this._handleRunCodeClick, this);
             Y.one('#btn_reset').on('click', this._handleResetClick, this);
+
+            Y.all('.bt-level').on('click', this._handleLevelBtClick, this);
 
             // TODO: add possibility to remove/reorder item
             // TODO: if the new item will be inserted as the last one, just make the container bigger instead of drifting an item

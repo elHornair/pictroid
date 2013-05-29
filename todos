@@ -3,6 +3,7 @@
 - Dragndrop: Removen möglich machen
 - Syntaxfehler irgendwie anzeigen: Roter Pfeil oder so
 - browsercheck
+    - drag'n'drop macht probleme in FF
 - Keine Vendors mehr: bootstrap reinpappen, yui über CDN laden
 - Grafiken anpassen (icons, steine, roboter?)
 - Layout ein bisschen nett machen

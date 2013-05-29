@@ -111,7 +111,6 @@ YUI.add('pictroid-main', function (Y) {
                         childToDrift.addClass('drift');
                     }
                 }
-
             }
         },
 
@@ -183,9 +182,9 @@ YUI.add('pictroid-main', function (Y) {
 
             // event listeners
             dragItems.on('drag:end', this._handleDragEnd);
-            this._dropContainer .drop.on('drop:hit', this._handleDropHit, this);
-            this._dropContainer .drop.on('drop:exit', this._handleDropExit, this);
-            this._dropContainer .drop.on('drop:over', this._handleDropOver, this);
+            this._dropContainer.drop.on('drop:hit', this._handleDropHit, this);
+            this._dropContainer.drop.on('drop:exit', this._handleDropExit, this);
+            this._dropContainer.drop.on('drop:over', this._handleDropOver, this);
 
             Y.one('#btn_run_code').on('click', this._handleRunCodeClick, this);
             Y.one('#btn_reset').on('click', this._handleResetClick, this);

@@ -20,7 +20,7 @@ YUI.add('pictroid-main', function (Y) {
 
     Main.ATTRS = {
         tileSize: {
-            value: 66// size in pixels, including margins (size of the programming icons)
+            value: 56// size in pixels, including margins (size of the programming icons)
         },
         robot: {
             valueFn: function () {

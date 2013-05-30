@@ -151,6 +151,8 @@ YUI.add('pictroid-main', function (Y) {
         },
 
         _handleResetClick: function (e) {
+            e.preventDefault();
+
             this._swapRobotControlButtons();
             this.get('robot').reset();
         },

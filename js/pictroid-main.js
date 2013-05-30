@@ -68,7 +68,14 @@ YUI.add('pictroid-main', function (Y) {
         /****************************************************************************************/
 
         _handleDragEnd: function (e) {
+            var droppedItem = e.target.get('node');
+
             e.preventDefault();
+
+            // remove items that are already in use
+            if (droppedItem.get('parentNode').get('id') === 'commands-in-use') {
+                droppedItem.remove();
+            }
         },
 
         _handleDropHit: function (e) {
@@ -80,8 +87,10 @@ YUI.add('pictroid-main', function (Y) {
 
             this._cleanupDrifts(dropContainer);
 
+            // insert item at the right position
             if (currentChildren.size() === 0 || insertionIndex >= currentChildren.size()) {
                 dropContainer.get('node').append(nodeToInsert);
+
             } else {
                 currentChildren.item(insertionIndex).insert(nodeToInsert, 'before');
             }
@@ -186,6 +195,8 @@ YUI.add('pictroid-main', function (Y) {
 
             // event listeners
             commandsOriginal.on('drag:end', this._handleDragEnd);
+            commandsInUse.on('drag:end', this._handleDragEnd);
+
             this._dropContainer.drop.on('drop:hit', this._handleDropHit, this);
             this._dropContainer.drop.on('drop:exit', this._handleDropExit, this);
             this._dropContainer.drop.on('drop:over', this._handleDropOver, this);

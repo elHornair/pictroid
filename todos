@@ -1,6 +1,5 @@
-- Dragndrop: moven möglich machen
-- Dragndrop: Removen möglich machen
 - Syntaxfehler irgendwie anzeigen: Roter Pfeil oder so
+- Wenn Ziel erreicht wurde/Wenn Programm abgelaufen: Message ausgeben
 - browsercheck
     - drag'n'drop macht probleme in FF
 - Keine Vendors mehr: bootstrap reinpappen, yui über CDN laden

@@ -7,7 +7,7 @@
     list-style-type: none;
     margin: 3px;
     z-index: 2;
-    background-image:url('../img/icons.png');
+    background-image:url('../img/sprite.png');
     background-color: #FFFF73;
 
     border-radius: 10px;
@@ -20,31 +20,31 @@
 }
 
 .item.left {
-    background-position: 278px 480px;
+    background-position: -300px -1px;
 }
 .item.right {
-    background-position: 355px 480px;
+    background-position: -200px -1px;
 }
 .item.up {
-    background-position: 432px 480px;
+    background-position: -100px -1px;
 }
 .item.down {
-    background-position: 509px 480px;
+    background-position: 0px -1px;
 }
 .item.repeat {
-    background-position: 586px 790px;
+    background-position: -100px -101px;
     background-color: #67E667;
 }
 .item.endrepeat {
-    background-position: 663px 790px;
+    background-position: -200px -101px;
     background-color: #67E667;
 }
 .item.condition {
-    background-position: 586px 790px;
+    background-position: -300px -101px;
     background-color: #FF7373;
 }
 .item.endcondition {
-    background-position: 663px 790px;
+    background-position: -200px -101px;
     background-color: #FF7373;
 }
 .item.counter {
@@ -60,10 +60,10 @@
     background-color: #FFB273;
 }
 .item.stone {
-    background-position: 509px 540px;
+    background-position: 0px -101px;
 }
 .item.field {
-    background-position: 509px 420px;
+    background-image: none;
 }
 
 .item.drift {

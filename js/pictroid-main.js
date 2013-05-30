@@ -173,15 +173,19 @@ YUI.add('pictroid-main', function (Y) {
         /****************************************************************************************/
 
         initializer: function (cfg) {
-            var dragItems = new Y.DD.Delegate({
-                    container: '#items',
+            var commandsOriginal = new Y.DD.Delegate({
+                    container: '#commands-original',
+                    nodes: 'li'
+                }),
+                commandsInUse = new Y.DD.Delegate({
+                    container: '#commands-in-use',
                     nodes: 'li'
                 });
 
-            this._dropContainer = Y.one('#drop').plug(Y.Plugin.Drop);
+            this._dropContainer = Y.one('#commands-in-use').plug(Y.Plugin.Drop);
 
             // event listeners
-            dragItems.on('drag:end', this._handleDragEnd);
+            commandsOriginal.on('drag:end', this._handleDragEnd);
             this._dropContainer.drop.on('drop:hit', this._handleDropHit, this);
             this._dropContainer.drop.on('drop:exit', this._handleDropExit, this);
             this._dropContainer.drop.on('drop:over', this._handleDropOver, this);

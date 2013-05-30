@@ -1,8 +1,7 @@
 - Syntaxfehler irgendwie anzeigen: Roter Pfeil oder so
-- Wenn Ziel erreicht wurde/Wenn Programm abgelaufen: Message ausgeben
+- Wenn Ziel erreicht wurde/Wenn Programm abgelaufen/wenn in stein reingelaufen/wenn ready: Message ausgeben (pictroid spricht)
 - browsercheck
     - drag'n'drop macht probleme in FF
-- Grafiken anpassen (icons, steine, roboter?)
 - Layout ein bisschen nett machen
 - Nice2have: Grün soll Ölpfütze sein
 - Nice2have: Autom. Einrücken von einzelnen programmbefehlen

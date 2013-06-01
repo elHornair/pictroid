@@ -159,39 +159,11 @@ YUI.add('pictroid-parser', function (Y) {
 
         isValid: function (instructions) {
             var i,
-                numInstructions,
+                numInstructions = instructions.length,
                 stack = [this.get('placeholder')],
                 replacement,
                 nextStackElement,
                 err = null;
-
-            // TODO: add proper tests
-//            instructions = [
-//                'repeat',
-//                    'two',
-//                    'left',
-//                    'repeat',
-//                        'infinite',
-//                        'left',
-//                        'up',
-//                        'left',
-//                        'condition',
-//                            'star',
-//                                'repeat',
-//                                    'three',
-//                                'endrepeat',
-//                        'endcondition',
-//                    'endrepeat',
-//                    'right',
-//                'endrepeat',
-//                'condition',
-//                    'star',
-//                    'left',
-//                'endcondition',
-//                'left'
-//            ];
-
-            numInstructions = instructions.length;
 
             for (i = 0; i < numInstructions; i++) {
 

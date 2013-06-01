@@ -100,7 +100,7 @@ YUI.add('pictroid-robot', function (Y) {
                 seven: 7,
                 eight: 8,
                 nine: 9,
-                infinite: 9999 // TODO: make it really infinite somehow?
+                infinite: 9999
             }
         }
     };

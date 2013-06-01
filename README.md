@@ -4,6 +4,8 @@
 This is a school project. It is intended to teach programming beginners the basics of programming by using pictures as
 the programming instructions.
 
+![Screenshot](/img/screenshot.png "Screenshot")
+
 ## Setup
 - Check out the git repo
 - Open 'index.html' in your browser

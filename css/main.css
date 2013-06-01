@@ -129,12 +129,12 @@
 }
 
 #commands-in-use {
-    clear: both;
+    float: left;
     min-height: 160px;
-    width: 242px;
-    padding-bottom: 50px;
     z-index: 1;
+    width: 60px;
     margin-left: 70px;
+    margin-right: 24px;
     padding: 20px 20px 50px;
     background-color: #f4f4f4;
     border: 1px solid #d4d4d4;
@@ -144,8 +144,6 @@
     -webkit-box-shadow: 0 1px 4px rgba(0,0,0,0.065);
     -moz-box-shadow: 0 1px 4px rgba(0,0,0,0.065);
     box-shadow: 0 1px 4px rgba(0,0,0,0.065);
-
-
 }
 
 #commands-in-use.yui3-dd-drop-over {

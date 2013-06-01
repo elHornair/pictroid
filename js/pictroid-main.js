@@ -86,14 +86,13 @@ YUI.add('pictroid-main', function (Y) {
             if (errorItem) {
                 errorItem.addClass('error');
             } else {
-                // TODO: insert fake node
-                // TODO: add nice error arrow
+                this._dropContainer.append('<li class="item empty error"></li>');
             }
         },
 
         _resetErrors: function () {
             this._dropContainer.get('children').removeClass('error');
-            // TODO: remove extra element
+            this._dropContainer.all('.empty').remove(true);
         },
 
         /****************************************************************************************/
@@ -211,7 +210,6 @@ YUI.add('pictroid-main', function (Y) {
             this._setMessage(this._initialMessage);
             this._resetErrors();
         },
-
 
         /****************************************************************************************/
         /************************************ public methods ************************************/

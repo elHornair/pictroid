@@ -285,7 +285,7 @@ YUI.add('pictroid-robot', function (Y) {
                 if (this._isGoalReached()) {
                     Y.fire('pictroid-msg', {
                         data: {
-                            msg: 'Pictroid reached goal. Pictroid is loading happiness program...',
+                            msg: 'Pictroid found delicious oil. Pictroid is loading happiness program...',
                             type: 'succ'
                         }
                     });
@@ -370,8 +370,8 @@ YUI.add('pictroid-robot', function (Y) {
             this._runInstruction(instructions, 0, function () {
                 Y.fire('pictroid-msg', {
                     data: {
-                        msg: 'Pictroid followed all instructions. Pictroid couldn\'t reach goal. Pictroid suggests to' +
-                            ' alter program.',
+                        msg: 'Pictroid followed all instructions. Pictroid couldn\'t find delicious oil. Pictroid' +
+                             ' suggests to alter program.',
                         type: 'info'
                     }
                 });

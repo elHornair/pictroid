@@ -32,6 +32,11 @@ YUI.add('pictroid-main', function (Y) {
                 robot.init();
                 return robot;
             }
+        },
+        messageNode: {
+            valueFn: function () {
+                return Y.one('#messages');
+            }
         }
     };
 
@@ -43,6 +48,7 @@ YUI.add('pictroid-main', function (Y) {
 
         _currentlyDriftedChildIndex: null,
         _dropContainer: null,
+        _initialMessage: 'Pictroid at your service. Drop instructions into the box below and hit "Run code".',
 
         /****************************************************************************************/
         /*********************************** private methods ************************************/
@@ -61,6 +67,33 @@ YUI.add('pictroid-main', function (Y) {
         _calcChildToDriftIndex: function (measurePointY) {
             var tileSize = this.get('tileSize');
             return Math.floor((measurePointY - tileSize / 2) / tileSize) + 1;
+        },
+
+        _setMessage: function (msg, type) {
+            var msgClass = 'text-info';
+
+            if (type === 'err') {
+                msgClass = 'text-error';
+            } else if (type === 'succ') {
+                msgClass = 'text-success';
+            }
+            this.get('messageNode').setHTML('<span class="' + msgClass + '">Bzzz... ' + msg + ' Bzzz...</span>');
+        },
+
+        _markError: function (index) {
+            var errorItem = this._dropContainer.get('children').item(index);
+
+            if (errorItem) {
+                errorItem.addClass('error');
+            } else {
+                // TODO: insert fake node
+                // TODO: add nice error arrow
+            }
+        },
+
+        _resetErrors: function () {
+            this._dropContainer.get('children').removeClass('error');
+            // TODO: remove extra element
         },
 
         /****************************************************************************************/
@@ -131,7 +164,7 @@ YUI.add('pictroid-main', function (Y) {
         _handleRunCodeClick: function (e) {
             var parser = new Y.Pictroid.Parser(),
                 instructions = [],
-                parseResult;
+                parseProtocol;
 
             e.preventDefault();
             this._swapRobotControlButtons();
@@ -140,13 +173,14 @@ YUI.add('pictroid-main', function (Y) {
                 instructions.push(item.getData().type);
             });
 
-            parseResult = parser.isValid(instructions);
+            parseProtocol = parser.isValid(instructions);
 
-            if (parseResult === true) {
+            if (parseProtocol.success) {
                 this.get('robot').run(instructions);
+                this._setMessage('Pictroid does as you command.');
             } else {
-                // TODO: show errors in coding area
-                Y.error('Parse error: ' + parseResult);
+                this._markError(parseProtocol.err.index);
+                this._setMessage(parseProtocol.err.description, 'err');
             }
         },
 
@@ -155,6 +189,8 @@ YUI.add('pictroid-main', function (Y) {
 
             this._swapRobotControlButtons();
             this.get('robot').reset();
+            this._setMessage(this._initialMessage);
+            this._resetErrors();
         },
 
         _handleLevelBtClick: function (e) {
@@ -171,6 +207,9 @@ YUI.add('pictroid-main', function (Y) {
 
             levelId = parseInt(e.target.getData('level'), 10);
             this.get('robot').setMap(levelId);
+
+            this._setMessage(this._initialMessage);
+            this._resetErrors();
         },
 
 
@@ -207,6 +246,12 @@ YUI.add('pictroid-main', function (Y) {
             Y.one('#btn_reset').on('click', this._handleResetClick, this);
 
             Y.all('.bt-level').on('click', this._handleLevelBtClick, this);
+
+            this._setMessage(this._initialMessage);
+
+            Y.on('pictroid-msg', function(e) {
+                this._setMessage(e.data.msg, e.data.type);
+            }, this);
 
             // TODO: add possibility to remove/reorder item
             // TODO: if the new item will be inserted as the last one, just make the container bigger instead of drifting an item

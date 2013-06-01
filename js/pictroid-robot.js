@@ -210,6 +210,12 @@ YUI.add('pictroid-robot', function (Y) {
                         y: this._y + deltaObj.deltaY
                     });
                 } else {
+                    Y.fire('pictroid-msg', {
+                        data: {
+                            msg: 'Ouch!',
+                            type: 'err'
+                        }
+                    });
                     this.get('robotNode').addClass('error');
                     Y.later(this.get('speed') / 2, this, function () {
                         this.get('robotNode').removeClass('error');
@@ -277,7 +283,12 @@ YUI.add('pictroid-robot', function (Y) {
             default:
                 this._move(instructions[i]);
                 if (this._isGoalReached()) {
-                    Y.log('Victory!');
+                    Y.fire('pictroid-msg', {
+                        data: {
+                            msg: 'Pictroid reached goal. Pictroid is loading happiness program...',
+                            type: 'succ'
+                        }
+                    });
                 } else {
                     i++;
                     Y.later(this.get('speed'), this, this._runInstruction, [instructions, i, callback]);
@@ -357,7 +368,13 @@ YUI.add('pictroid-robot', function (Y) {
         run: function (instructions) {
             this._reset = false;
             this._runInstruction(instructions, 0, function () {
-                Y.log('done');
+                Y.fire('pictroid-msg', {
+                    data: {
+                        msg: 'Pictroid followed all instructions. Pictroid couldn\'t reach goal. Pictroid suggests to' +
+                            ' alter program.',
+                        type: 'info'
+                    }
+                });
             });
         },
 

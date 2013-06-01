@@ -148,6 +148,35 @@ YUI.add('pictroid-parser', function (Y) {
             }, this);
         },
 
+        _getErrorMessage: function (nextStackElement) {
+            var message;
+
+            switch (nextStackElement) {
+            case 'endrepeat':
+                message = 'Pictroid expects endrepeat at this position.';// TODO: use symbol images in error messages
+                break;
+            case 'endcondition':
+                message = 'Pictroid expects endcondition at this position.';// TODO: use symbol images in error messages
+                break;
+            case 'conditional':
+            case 'e_conditional_expected':
+                message = 'Pictroid expects stone or field at this position.';// TODO: use symbol images in error messages
+                break;
+            case 'counter':
+            case 'e_counter_expected':
+                message = 'Pictroid expects 2-3 or &infin; at this position.';// TODO: use symbol images in error messages
+                break;
+            case undefined:
+                message = 'Pictroid does not expect this symbol at this position.';
+                break;
+            default:
+                message = 'Pictroid is not sure what\'s wrong.';
+                break;
+            }
+
+            return 'Pictroid doesn\'t understand your program: ' + message;
+        },
+
         /****************************************************************************************/
         /************************************ event handlers ************************************/
         /****************************************************************************************/
@@ -163,7 +192,9 @@ YUI.add('pictroid-parser', function (Y) {
                 stack = [this.get('placeholder')],
                 replacement,
                 nextStackElement,
-                err = null;
+                protocol = {
+                    success: true
+                };
 
             for (i = 0; i < numInstructions; i++) {
 
@@ -192,7 +223,12 @@ YUI.add('pictroid-parser', function (Y) {
                     break;
                 default:
                     if (nextStackElement !== instructions[i]) {
-                        err = "Unexpeced symbol at index " + i + ". Expected " + nextStackElement + ", received " + instructions[i];
+                        protocol.success = false;
+                        protocol.err = {
+                            description: this._getErrorMessage(nextStackElement),
+                            index: i
+                        };
+                        return protocol;
                     }
                 }
 
@@ -200,11 +236,14 @@ YUI.add('pictroid-parser', function (Y) {
 
             stack = this._removePlaceholders(stack);
             if (stack.length > 0) {
-                err = 'Stack not empty. Found ' + stack;
+                protocol.success = false;
+                protocol.err = {
+                    description: this._getErrorMessage(stack.pop()),
+                    index: instructions.length
+                };
             }
 
-            return err || true;
-
+            return protocol;
         },
 
         /****************************************************************************************/

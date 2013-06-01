@@ -1,11 +1,14 @@
-- Wenn Ziel erreicht wurde/Wenn Programm abgelaufen/wenn in stein reingelaufen/wenn ready: Message ausgeben (pictroid spricht)
-- Syntaxfehler melden (detailmeldung) in pictroid-feld
+- Syntaxfehler schön anzeigen: Roter Pfeil an richtiger stelle und detaillierte meldung oder so
 - browsercheck
     - drag'n'drop macht probleme in FF
 - Layout ein bisschen nett machen
-- Nice2have: Syntaxfehler schön anzeigen: Roter Pfeil an richtiger stelle und detaillierte meldung oder so
+- go through todos
+- Irgendwohin deployen (alainhorner.ch?)
+- README: bildlein hochladen
 - Nice2have: Grün soll Ölpfütze sein
+- Nice2have: Pictroid-Antenne
 - Nice2have: Autom. Einrücken von einzelnen programmbefehlen
 - Nice2have: Enter um Code laufen zu lassen
+- Nice2have: Pictroid-speed einstellbar machen
 - Vor Abgabe: YUI über internet laden (auskommentieren in index.html)
 - Nach Abgabe: Das Ding irgendwo veröffentlichen

@@ -15,6 +15,13 @@
     transition: margin 0.3s ease-in-out;
 }
 
+.item.error {
+    border-color: red;
+    border-width: 3px;
+    width: 46px;
+    height: 46px;
+}
+
 .item.yui3-dd-dragging {
     z-index: 99;
 }
@@ -22,30 +29,54 @@
 .item.left {
     background-position: -300px -1px;
 }
+.item.left.error {
+    background-position: -302px -3px;
+}
 .item.right {
     background-position: -200px -1px;
+}
+.item.right.error {
+    background-position: -202px -3px;
 }
 .item.up {
     background-position: -100px -1px;
 }
+.item.up.error {
+    background-position: -102px -3px;
+}
 .item.down {
     background-position: 0px -1px;
+}
+.item.down.error {
+    background-position: -2px -3px;
 }
 .item.repeat {
     background-position: -100px -101px;
     background-color: #67E667;
 }
+.item.repeat.error {
+    background-position: -102px -103px;
+}
 .item.endrepeat {
     background-position: -200px -101px;
     background-color: #67E667;
+}
+.item.endrepeat.error {
+    background-position: -202px -103px;
 }
 .item.condition {
     background-position: -300px -101px;
     background-color: #FF7373;
 }
+.item.condition.error {
+    background-position: -302px -103px;
+}
 .item.endcondition {
     background-position: -200px -101px;
     background-color: #FF7373;
+}
+.item.endcondition.error {
+    background-position: -202px -103px;
 }
 .item.counter {
     background-image: none;
@@ -56,11 +87,17 @@
     text-align: center;
     color: #555555;
 }
+.item.counter.error {
+    line-height: 48px;
+}
 .item.conditional {
     background-color: #FFB273;
 }
 .item.stone {
     background-position: 0px -101px;
+}
+.item.stone.error {
+    background-position: -2px -103px;
 }
 .item.field {
     background-image: none;
@@ -70,6 +107,9 @@
     margin-top: 30px;
 }
 
+#commands-original {
+    margin-left: 42px;
+}
 #commands-original .item {
     float: left;
 }
@@ -82,6 +122,7 @@
     width: 200px;
     padding-bottom: 50px;
     z-index: 1;
+    margin-left: 70px;
 }
 
 #commands-in-use.yui3-dd-drop-over {
@@ -89,7 +130,6 @@
 }
 
 /* map */
-
 #map {
     margin: 0;
     padding: 0;
@@ -165,6 +205,24 @@
 }
 
 #map li.goal {
-    background-image:url('../img/bg_pattern_green.png');
+    background-image: url('../img/bg_pattern_green.png');
     background-position: 278px 480px;
+}
+
+/*messages*/
+#messages {
+    margin-left: 70px;
+    margin-top: -50px;
+    margin-bottom: 20px;
+    min-height: 40px;
+    padding-right: 20px;
+    padding-left: 20px;
+    background-color: #fafafa;
+    border: 1px solid #d4d4d4;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    -webkit-box-shadow: 0 1px 4px rgba(0,0,0,0.065);
+    -moz-box-shadow: 0 1px 4px rgba(0,0,0,0.065);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.065);
 }

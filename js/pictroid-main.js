@@ -175,8 +175,8 @@ YUI.add('pictroid-main', function (Y) {
             parseProtocol = parser.isValid(instructions);
 
             if (parseProtocol.success) {
-                this.get('robot').run(instructions);
                 this._setMessage('Pictroid does as you command.');
+                this.get('robot').run(instructions);
             } else {
                 this._markError(parseProtocol.err.index);
                 this._setMessage(parseProtocol.err.description, 'err');

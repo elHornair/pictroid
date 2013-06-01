@@ -164,7 +164,7 @@ YUI.add('pictroid-parser', function (Y) {
                 break;
             case 'counter':
             case 'e_counter_expected':
-                message = 'Pictroid expects 2-3 or &infin; at this position.';// TODO: use symbol images in error messages
+                message = 'Pictroid expects 2-9 or &infin; at this position.';// TODO: use symbol images in error messages
                 break;
             case undefined:
                 message = 'Pictroid does not expect this symbol at this position.';

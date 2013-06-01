@@ -116,7 +116,7 @@ YUI.add('pictroid-main', function (Y) {
                 droppedItem = e.drag.get('node'),
                 currentChildren = dropContainer.get('node').get('children'),
                 insertionIndex = this._calcChildToDriftIndex(this._calcRelativeDragCenterY(e.target, e.drag)),
-                nodeToInsert = '<li class="' + droppedItem.getAttribute('class') + '" data-type="' + droppedItem.getData().type + '">' + droppedItem.getContent() + '</li>';// TODO: use template
+                nodeToInsert = '<li class="' + droppedItem.getAttribute('class') + '" data-type="' + droppedItem.getData().type + '">' + droppedItem.getContent() + '</li>';
 
             this._cleanupDrifts(dropContainer);
 
@@ -252,10 +252,6 @@ YUI.add('pictroid-main', function (Y) {
             Y.on('pictroid-msg', function(e) {
                 this._setMessage(e.data.msg, e.data.type);
             }, this);
-
-            // TODO: add possibility to remove/reorder item
-            // TODO: if the new item will be inserted as the last one, just make the container bigger instead of drifting an item
-
         },
 
         destructor: function () {

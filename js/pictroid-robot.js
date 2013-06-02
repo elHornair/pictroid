@@ -22,7 +22,7 @@ YUI.add('pictroid-robot', function (Y) {
         mapNode: {},
         robotNode: {},
         speed: {
-            value: 200// milliseconds between two steps
+            value: 400// milliseconds between two steps
         },
         tileSize: {
             value: 60// pixels of a tile on the map

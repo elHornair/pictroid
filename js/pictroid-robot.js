@@ -212,7 +212,7 @@ YUI.add('pictroid-robot', function (Y) {
                     Y.fire('pictroid-msg', {
                         data: {
                             msg: 'Ouch!',
-                            type: 'err'
+                            type: 'warn'
                         }
                     });
                     this.get('robotNode').addClass('error');
@@ -371,7 +371,7 @@ YUI.add('pictroid-robot', function (Y) {
                     data: {
                         msg: 'Pictroid followed all instructions. Pictroid couldn\'t find delicious oil. Pictroid' +
                              ' suggests to alter program.',
-                        type: 'info'
+                        type: 'warn'
                     }
                 });
             });

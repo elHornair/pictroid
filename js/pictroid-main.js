@@ -76,6 +76,8 @@ YUI.add('pictroid-main', function (Y) {
                 msgClass = 'text-error';
             } else if (type === 'succ') {
                 msgClass = 'text-success';
+            } else if (type === 'warn') {
+                msgClass = 'text-warning';
             }
             this.get('messageNode').setHTML('<span class="' + msgClass + '">Bzzz... ' + msg + ' Bzzz...</span>');
         },

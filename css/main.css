@@ -257,3 +257,24 @@
     -moz-box-shadow: 0 1px 4px rgba(0,0,0,0.065);
     box-shadow: 0 1px 4px rgba(0,0,0,0.065);
 }
+
+#messages .label {
+    color: #333333;
+    font-size: 13px;
+    text-shadow: none;
+}
+#messages .orange {
+    background-color: #FFB273;
+}
+#messages .blue {
+    background-color: #5CCCCC;
+}
+#messages .yellow {
+    background-color: #FFFF73;
+}
+#messages .green {
+    background-color: #67E667;
+}
+#messages .red {
+    background-color: #FF7373;
+}

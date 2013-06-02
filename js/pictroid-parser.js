@@ -148,26 +148,37 @@ YUI.add('pictroid-parser', function (Y) {
             }, this);
         },
 
+        _getSymbolLabel: function (classes, body) {
+            return '<span class="label ' + classes + '">' + body + '</span>';
+        },
+
         _getErrorMessage: function (nextStackElement) {
             var message;
 
             switch (nextStackElement) {
             case 'endrepeat':
-                message = 'Pictroid expects endrepeat at this position.';// TODO: use symbol images in error messages
+                message = 'Pictroid expects a ' + this._getSymbolLabel('green', 'green symbol with cross') + ' at this position.';
                 break;
             case 'endcondition':
-                message = 'Pictroid expects endcondition at this position.';// TODO: use symbol images in error messages
+                message = 'Pictroid expects a ' + this._getSymbolLabel('red', 'red symbol with cross') + ' at this position.';
                 break;
             case 'conditional':
-            case 'e_conditional_expected':
-                message = 'Pictroid expects stone or field at this position.';// TODO: use symbol images in error messages
+                case 'e_conditional_expected':
+                message = 'Pictroid expects an ' + this._getSymbolLabel('orange', 'orange symbol') + ' at this position.';
                 break;
             case 'counter':
             case 'e_counter_expected':
-                message = 'Pictroid expects 2-9 or &infin; at this position.';// TODO: use symbol images in error messages
+                message = 'Pictroid expects a ' + this._getSymbolLabel('blue', 'blue symbol') + ' at this position.';
                 break;
             case undefined:
-                message = 'Pictroid does not expect this symbol at this position.';
+                message =
+                    'Pictroid expects a ' +
+                    this._getSymbolLabel('yellow', 'yellow symbol') +
+                    ', a ' +
+                    this._getSymbolLabel('red', 'red question mark') +
+                    ' or ' +
+                    this._getSymbolLabel('green', 'a green circular arrow') +
+                    ' at this position.';
                 break;
             default:
                 message = 'Pictroid is not sure what\'s wrong.';

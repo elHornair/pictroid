@@ -186,7 +186,6 @@ YUI.add('pictroid-robot', function (Y) {
                 deltaY = 1;
                 break;
             default:
-                // TODO: log error at least
                 Y.error('not a move statement: ' + dir);
                 break;
             }

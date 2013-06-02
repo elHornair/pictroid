@@ -6,6 +6,9 @@ the programming instructions. It looks as follows:
 
 ![Screenshot](/img/screenshot.png "Screenshot")
 
+## Try it
+[Here](http://alainhorner.ch/experiments/pictroid) you go
+
 ## Setup
 - Check out the git repo
 - Open 'index.html' in your browser
